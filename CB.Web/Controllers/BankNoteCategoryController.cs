@@ -1,0 +1,107 @@
+using CB.Application.DTOs.BankNoteCategory;
+using CB.Application.Interfaces.Services;
+using CB.Application.Validators.BankNoteCategory;
+using CB.Shared.Helpers;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+
+namespace CB.Web.Controllers
+{
+    [Route("/api/[controller]")]
+    [ApiController]
+    [Authorize]
+    public class BankNoteCategoryController : ControllerBase
+    {
+        private readonly IBankNoteCategoryService _monetaryIndicatorCategoryService;
+        private readonly BankNoteCategoryCreateValidator _createValidator;
+        private readonly BankNoteCategoryEditValidator _editValidator;
+
+        public BankNoteCategoryController(
+            IBankNoteCategoryService monetaryIndicatorCategoryService,
+            BankNoteCategoryCreateValidator createValidator,
+            BankNoteCategoryEditValidator editValidator
+        )
+        {
+            _monetaryIndicatorCategoryService = monetaryIndicatorCategoryService;
+            _createValidator = createValidator;
+            _editValidator = editValidator;
+        }
+
+        // GET: /api/monetaryIndicatorCategory
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var data = await _monetaryIndicatorCategoryService.GetAllAsync();
+            return Ok(data);
+        }
+
+        // GET: /api/monetaryIndicatorCategory/{id}
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            var data = await _monetaryIndicatorCategoryService.GetByIdAsync(id);
+            if (data == null)
+            {
+                Log.Warning("Bank qeyd kateqoriyası məlumatı tapılmadı : Id = {@Id}", id);
+                return NotFound();
+            }
+
+            return Ok(new { status = "success", data });
+        }
+
+        // POST: /api/monetaryIndicatorCategory
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] BankNoteCategoryCreateDTO dto)
+        {
+            ValidationResult validationResult = await _createValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+                return BadRequest(new { status = "error", messages = validationResult.Errors.Select(e => e.ErrorMessage) });
+            dto.Slugs = SlugHelper.GenerateSlugs(dto.Titles);
+            var created = await _monetaryIndicatorCategoryService.CreateAsync(dto);
+
+            if (!created)
+            {
+                Log.Warning("Bank qeyd kateqoriyası məlumatı əlavə edilməsi uğursuz oldu : {@Dto}", dto);
+                return BadRequest();
+            }
+            Log.Information("Bank qeyd kateqoriyası məlumatı uğurla əlavə olundu : {@Dto}", dto);
+            return Ok(new { status = "success", message = "Məlumat uğurla əlavə olundu" });
+        }
+
+        // PUT: /api/monetaryIndicatorCategory/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(int id, [FromBody] BankNoteCategoryEditDTO dto)
+        {
+            ValidationResult validationResult = await _editValidator.ValidateAsync(dto);
+            if (!validationResult.IsValid)
+                return BadRequest(new { status = "error", messages = validationResult.Errors.Select(e => e.ErrorMessage) });
+            dto.Slugs = SlugHelper.GenerateSlugs(dto.Titles);
+            var updated = await _monetaryIndicatorCategoryService.UpdateAsync(id, dto);
+            if (!updated)
+            {
+                Log.Warning("Bank qeyd kateqoriyası məlumatı yenilənməsi uğursuz oldu : {@Dto}", dto);
+                return NotFound();
+            }
+            Log.Information("Bank qeyd kateqoriyası məlumatı yenilənməsi uğurludur : {@Dto}", dto);
+            return Ok(new { status = "success", message = "Məlumat uğurla yeniləndi" });
+        }
+
+        // DELETE: /api/monetaryIndicatorCategory/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _monetaryIndicatorCategoryService.DeleteAsync(id);
+            if (!deleted)
+            {
+                Log.Warning("Bank qeyd kateqoriyası məlumatının silinməsi uğursuzdur : Id = {@Id}", id);
+
+                return NotFound();
+            }
+
+            Log.Information("Bank qeyd kateqoriyası məlumatı silinməsi uğurludur : Id = {@Id}", id);
+            return Ok(new { status = "success", message = "Məlumat uğurla silindi" });
+        }
+    }
+}

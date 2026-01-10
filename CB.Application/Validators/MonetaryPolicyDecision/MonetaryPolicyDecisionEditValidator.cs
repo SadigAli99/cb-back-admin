@@ -1,0 +1,32 @@
+
+
+using CB.Application.DTOs.MonetaryPolicyDecision;
+using FluentValidation;
+
+namespace CB.Application.Validators.MonetaryPolicyDecision
+{
+    public class MonetaryPolicyDecisionEditValidator : AbstractValidator<MonetaryPolicyDecisionEditDTO>
+    {
+        public MonetaryPolicyDecisionEditValidator()
+        {
+
+            RuleFor(x => x.Titles)
+                .NotEmpty().WithMessage("Ən azı bir dil üçün başlıq daxil edilməlidir.");
+
+            RuleForEach(x => x.Titles)
+                .Must(v => !string.IsNullOrWhiteSpace(v.Value))
+                .WithMessage("Bu dil üçün başlıq boş ola bilməz.")
+                .Must(v => v.Value.Length <= 500)
+                .WithMessage("Bu dil üçün başlıq 500 simvoldan artıq ola bilməz.");
+
+            RuleFor(x => x.Descriptions)
+                .NotEmpty().WithMessage("Ən azı bir dil üçün başlıq daxil edilməlidir.");
+
+            RuleForEach(x => x.Descriptions)
+                .Must(v => !string.IsNullOrWhiteSpace(v.Value))
+                .WithMessage("Bu dil üçün mətn boş ola bilməz.")
+                .Must(v => v.Value.Length <= 20000)
+                .WithMessage("Bu dil üçün mətn 20000 simvoldan artıq ola bilməz.");
+        }
+    }
+}

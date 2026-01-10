@@ -1,0 +1,101 @@
+using CB.Application.DTOs.NationalBankNoteMoneySign;
+using CB.Application.Interfaces.Services;
+using CB.Application.Validators.NationalBankNoteMoneySign;
+using FluentValidation.Results;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Serilog;
+
+namespace CB.Web.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class NationalBankNoteMoneySignController : ControllerBase
+    {
+        private readonly INationalBankNoteMoneySignService _nationalBankNoteMoneySignService;
+        private readonly NationalBankNoteMoneySignCreateValidator _createValidator;
+        private readonly NationalBankNoteMoneySignEditValidator _editValidator;
+
+        public NationalBankNoteMoneySignController(
+            INationalBankNoteMoneySignService nationalBankNoteMoneySignService,
+            NationalBankNoteMoneySignCreateValidator createValidator,
+            NationalBankNoteMoneySignEditValidator editValidator
+        )
+        {
+            _nationalBankNoteMoneySignService = nationalBankNoteMoneySignService;
+            _createValidator = createValidator;
+            _editValidator = editValidator;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            List<NationalBankNoteMoneySignGetDTO> data = await _nationalBankNoteMoneySignService.GetAllAsync();
+            return Ok(data);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Detail(int id)
+        {
+            NationalBankNoteMoneySignGetDTO? data = await _nationalBankNoteMoneySignService.GetByIdAsync(id);
+            if (data is null)
+            {
+                Log.Warning("Kağız pul nişanları məlumatı tapılmadı : Id = {@Id}", id);
+                return NotFound();
+            }
+            return Ok(data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromForm] NationalBankNoteMoneySignCreateDTO dTO)
+        {
+            ValidationResult validationResult = await _createValidator.ValidateAsync(dTO);
+            if (!validationResult.IsValid)
+                return BadRequest(new { status = "error", messages = validationResult.Errors.Select(x => x.ErrorMessage) });
+            bool created = await _nationalBankNoteMoneySignService.CreateAsync(dTO);
+            if (!created)
+            {
+                Log.Warning("Kağız pul nişanları məlumatı əlavə edilməsi uğursuz oldu : {@Dto}", dTO);
+                return BadRequest();
+            }
+
+            Log.Information("Kağız pul nişanları məlumatı uğurla əlavə olundu : {@Dto}", dTO);
+            return Ok(new { status = "success", message = "Məlumat uğurla əlavə olundu" });
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Edit(int id, [FromForm] NationalBankNoteMoneySignEditDTO dTO)
+        {
+            ValidationResult validationResult = await _editValidator.ValidateAsync(dTO);
+            if (!validationResult.IsValid)
+                return BadRequest(new { status = "error", messages = validationResult.Errors.Select(x => x.ErrorMessage) });
+
+            bool updated = await _nationalBankNoteMoneySignService.UpdateAsync(id, dTO);
+            if (!updated)
+            {
+                Log.Warning("Kağız pul nişanları məlumatı yenilənməsi uğursuz oldu : {@Dto}", dTO);
+                return NotFound();
+            }
+            Log.Information("Kağız pul nişanları məlumatı yenilənməsi uğurludur : {@Dto}", dTO);
+            return Ok(new { status = "success", message = "Məlumat uğurla yeniləndi" });
+
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var deleted = await _nationalBankNoteMoneySignService.DeleteAsync(id);
+            if (!deleted)
+            {
+                Log.Warning("Kağız pul nişanları məlumatının silinməsi uğursuzdur : Id = {@Id}", id);
+                return NotFound();
+            }
+            Log.Information("Kağız pul nişanları məlumatı silinməsi uğurludur : Id = {@Id}", id);
+            return Ok(new { status = "success", message = "Məlumat uğurla silindi" });
+
+        }
+
+    }
+}

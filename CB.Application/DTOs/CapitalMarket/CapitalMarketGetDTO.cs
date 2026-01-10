@@ -1,0 +1,12 @@
+
+namespace CB.Application.DTOs.CapitalMarket
+{
+    public class CapitalMarketGetDTO
+    {
+        public int Id { get; set; }
+        public string? CapitalMarketCategory { get; set; }
+        public string? File { get; set; }
+        public string? FileType { get; set; }
+        public Dictionary<string, string> Titles { get; set; } = new();
+    }
+}

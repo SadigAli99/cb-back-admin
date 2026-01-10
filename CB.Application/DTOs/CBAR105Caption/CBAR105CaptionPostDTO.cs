@@ -1,0 +1,10 @@
+
+
+namespace CB.Application.DTOs.CBAR105Caption
+{
+    public class CBAR105CaptionPostDTO
+    {
+        public Dictionary<string, string> Descriptions { get; set; } = new();
+    }
+
+}

@@ -1,0 +1,20 @@
+
+using CB.Application.DTOs.MetalMoney;
+using FluentValidation;
+
+namespace CB.Application.Validators.MetalMoney
+{
+    public class MetalMoneyCreateValidator : AbstractValidator<MetalMoneyCreateDTO>
+    {
+        public MetalMoneyCreateValidator()
+        {
+            RuleFor(x => x.File)
+                .Must(file => file == null || file.Length / 1024 <= 10000)
+                .WithMessage("Faylın ölçüsü 10 MB-dan çox olmamalıdır.")
+                .Must(file => file == null || file.ContentType.Contains("image"))
+                .WithMessage("Fayl şəkil formatında olmalıdır");
+
+
+        }
+    }
+}
