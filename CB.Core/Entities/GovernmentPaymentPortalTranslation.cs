@@ -6,7 +6,7 @@ namespace CB.Core.Entities
     public class GovernmentPaymentPortalTranslation : BaseEntity
     {
         [StringLength(50000)]
-        public string? Description { get; set; }
+        public string? Description { get; set; } = string.Empty;
         public int GovernmentPaymentPortalId { get; set; }
         public GovernmentPaymentPortal GovernmentPaymentPortal { get; set; } = null!;
 
