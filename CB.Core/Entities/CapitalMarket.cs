@@ -10,7 +10,7 @@ namespace CB.Core.Entities
         [StringLength(50)]
         public string? FileType { get; set; } = null!;
         public int? CapitalMarketCategoryId { get; set; }
-        public CapitalMarketCategory? CapitalMarketCategory { get; set; }
+        public CapitalMarketCategory CapitalMarketCategory { get; set; } = null!;
         public List<CapitalMarketTranslation> Translations { get; set; } = new();
     }
 }

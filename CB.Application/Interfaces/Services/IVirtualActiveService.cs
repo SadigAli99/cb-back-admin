@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IVirtualActiveService
     {
         Task<bool> CreateOrUpdate(VirtualActivePostDTO dTO);
-        Task<VirtualActiveGetDTO> GetFirst();
+        Task<VirtualActiveGetDTO?> GetFirst();
     }
 }

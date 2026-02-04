@@ -28,7 +28,7 @@ namespace CB.Infrastructure.Services
         public async Task<List<CreditInstitutionSubCategoryGetDTO>> GetAllAsync()
         {
             var entities = await _repository.GetQuery()
-                        .Include(x => x.CreditInstitutionCategory)
+                        .Include(x => x.CreditInstitutionCategory!)
                         .ThenInclude(x => x.Translations)
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)

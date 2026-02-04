@@ -87,7 +87,7 @@ namespace CB.Infrastructure.Services
                     dto.RegistrationTimes.TryGetValue(v.Key, out var registrationTime);
 
 
-                    var existingTranslation = contact.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = contact.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -114,7 +114,7 @@ namespace CB.Infrastructure.Services
 
         public async Task<ContactGetDTO?> GetFirst()
         {
-            Contact contact = await _repository.GetQuery()
+            Contact? contact = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);

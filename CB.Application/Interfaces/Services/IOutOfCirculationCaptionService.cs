@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IOutOfCirculationCaptionService
     {
         Task<bool> CreateOrUpdate(OutOfCirculationCaptionPostDTO dTO);
-        Task<OutOfCirculationCaptionGetDTO> GetFirst();
+        Task<OutOfCirculationCaptionGetDTO?> GetFirst();
     }
 }

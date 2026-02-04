@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IRevisionPolicyService
     {
         Task<bool> CreateOrUpdate(RevisionPolicyPostDTO dTO);
-        Task<RevisionPolicyGetDTO> GetFirst();
+        Task<RevisionPolicyGetDTO?> GetFirst();
     }
 }

@@ -13,7 +13,7 @@ namespace CB.Core.Entities
         public Branch Branch { get; set; } = null!;
         public int PositionId { get; set; }
         public Position Position { get; set; } = null!;
-        public List<VacancyTranslation>? Translations { get; set; }
+        public List<VacancyTranslation>Translations {get; set; } = new();
         public List<VacancyDetail>? Details { get; set; }
     }
 }

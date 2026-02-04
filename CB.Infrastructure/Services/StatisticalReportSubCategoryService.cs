@@ -28,7 +28,7 @@ namespace CB.Infrastructure.Services
         public async Task<List<StatisticalReportSubCategoryGetDTO>> GetAllAsync()
         {
             var entities = await _repository.GetQuery()
-                        .Include(x => x.StatisticalReportCategory)
+                        .Include(x => x.StatisticalReportCategory!)
                         .ThenInclude(x => x.Translations)
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)

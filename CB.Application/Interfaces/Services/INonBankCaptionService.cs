@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface INonBankCaptionService
     {
         Task<bool> CreateOrUpdate(NonBankCaptionPostDTO dTO);
-        Task<NonBankCaptionGetDTO> GetFirst();
+        Task<NonBankCaptionGetDTO?> GetFirst();
     }
 }

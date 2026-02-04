@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IStockExchangeCaptionService
     {
         Task<bool> CreateOrUpdate(StockExchangeCaptionPostDTO dTO);
-        Task<StockExchangeCaptionGetDTO> GetFirst();
+        Task<StockExchangeCaptionGetDTO?> GetFirst();
     }
 }

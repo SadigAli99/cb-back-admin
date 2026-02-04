@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public string? ReceptionSchedule { get; set; }
         [StringLength(20)]
         public string? FileSize { get; set; }
-        public List<ContactTranslation>? Translations { get; set; }
+        public List<ContactTranslation>Translations {get; set; } = new();
     }
 }

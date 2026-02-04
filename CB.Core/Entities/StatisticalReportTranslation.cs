@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int StatisticalReportId { get; set; }
         public StatisticalReport? StatisticalReport { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

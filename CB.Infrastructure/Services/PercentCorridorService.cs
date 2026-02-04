@@ -25,7 +25,7 @@ namespace CB.Infrastructure.Services
         public async Task<List<PercentCorridorGetDTO>> GetAllAsync()
         {
             var entities = await _repository.GetQuery()
-                            .Include(x => x.PercentCorridorCategory)
+                            .Include(x => x.PercentCorridorCategory!)
                             .ThenInclude(x => x.Translations)
                             .Where(x => x.DeletedAt == null)
                             .OrderByDescending(x => x.Date)

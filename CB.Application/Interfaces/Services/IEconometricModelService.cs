@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IEconometricModelService
     {
         Task<bool> CreateOrUpdate(EconometricModelPostDTO dTO);
-        Task<EconometricModelGetDTO> GetFirst();
+        Task<EconometricModelGetDTO?> GetFirst();
     }
 }

@@ -6,6 +6,6 @@ namespace CB.Core.Entities
     {
         [StringLength(50)]
         public string? Name { get; set; }
-        public List<RolePermission>? Permissions { get; set; }
+        public List<RolePermission> Permissions { get; set; } = new();
     }
 }

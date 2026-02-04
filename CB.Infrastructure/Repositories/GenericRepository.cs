@@ -16,7 +16,7 @@ namespace CB.Infrastructure.Repositories
             _dbSet = context.Set<T>();
         }
 
-        public async Task<T> GetByIdAsync(int id) => await _dbSet.Where(x => x.DeletedAt == null).FirstOrDefaultAsync(x => x.Id == id);
+        public async Task<T?> GetByIdAsync(int id) => await _dbSet.Where(x => x.DeletedAt == null).FirstOrDefaultAsync(x => x.Id == id);
 
         public async Task<IEnumerable<T>> GetAllAsync() => await _dbSet.Where(x => x.DeletedAt == null).ToListAsync();
 

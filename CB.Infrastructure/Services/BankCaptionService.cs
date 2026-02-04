@@ -27,18 +27,18 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateOrUpdate(BankCaptionPostDTO dto)
         {
             var languages = await _languageRepository.GetAllAsync();
-            BankCaption? about = await _repository.GetQuery()
+            BankCaption? bankCaption = await _repository.GetQuery()
                                         .Include(h => h.Translations)
                                         .ThenInclude(ht => ht.Language)
                                         .FirstOrDefaultAsync();
 
             bool result;
 
-            if (about is null)
+            if (bankCaption is null)
             {
-                about = _mapper.Map<BankCaption>(dto);
+                bankCaption = _mapper.Map<BankCaption>(dto);
 
-                about.Translations = dto.Descriptions.Select(v =>
+                bankCaption.Translations = dto.Descriptions.Select(v =>
                 {
                     var lang = languages.FirstOrDefault(l => l.Code == v.Key);
                     if (lang == null)
@@ -51,11 +51,11 @@ namespace CB.Infrastructure.Services
                     };
                 }).ToList();
 
-                result = await _repository.AddAsync(about);
+                result = await _repository.AddAsync(bankCaption);
             }
             else
             {
-                _mapper.Map(dto, about);
+                _mapper.Map(dto, bankCaption);
 
                 foreach (var v in dto.Descriptions)
                 {
@@ -63,7 +63,7 @@ namespace CB.Infrastructure.Services
                     if (lang == null)
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
-                    var existingTranslation = about.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = bankCaption.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -71,7 +71,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        about.Translations.Add(new BankCaptionTranslation
+                        bankCaption.Translations.Add(new BankCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Description = v.Value
@@ -79,7 +79,7 @@ namespace CB.Infrastructure.Services
                     }
                 }
 
-                result = await _repository.UpdateAsync(about);
+                result = await _repository.UpdateAsync(bankCaption);
             }
 
 
@@ -88,12 +88,12 @@ namespace CB.Infrastructure.Services
 
         public async Task<BankCaptionGetDTO?> GetFirst()
         {
-            BankCaption about = await _repository.GetQuery()
+            BankCaption? bankCaption = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);
 
-            return about == null ? null : _mapper.Map<BankCaptionGetDTO>(about);
+            return bankCaption == null ? null : _mapper.Map<BankCaptionGetDTO>(bankCaption);
         }
     }
 }

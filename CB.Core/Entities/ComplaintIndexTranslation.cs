@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int ComplaintIndexId { get; set; }
         public ComplaintIndex? ComplaintIndex { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

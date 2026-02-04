@@ -176,7 +176,7 @@ namespace CB.Infrastructure.Services
 
             var image = entity.Images.FirstOrDefault(i => i.Id == imageId);
             if (image is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, image.Image);
+            FileManager.FileDelete(_env.WebRootPath, image.Image ?? "");
             entity.Images.Remove(image);
 
             return await _repository.UpdateAsync(entity);

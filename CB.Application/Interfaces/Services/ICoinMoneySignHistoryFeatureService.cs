@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface ICoinMoneySignHistoryFeatureService
     {
         Task<bool> CreateOrUpdate(CoinMoneySignHistoryFeaturePostDTO dTO);
-        Task<CoinMoneySignHistoryFeatureGetDTO> GetFirst();
+        Task<CoinMoneySignHistoryFeatureGetDTO?> GetFirst();
     }
 }

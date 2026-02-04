@@ -12,6 +12,6 @@ namespace CB.Core.Entities
         public int DirectorContactId { get; set; }
         public DirectorContact? DirectorContact { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

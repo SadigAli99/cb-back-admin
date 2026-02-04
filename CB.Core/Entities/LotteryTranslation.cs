@@ -15,6 +15,6 @@ namespace CB.Core.Entities
         public int LotteryId { get; set; }
         public Lottery? Lottery { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

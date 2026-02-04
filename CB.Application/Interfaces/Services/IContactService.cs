@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IContactService
     {
         Task<bool> CreateOrUpdate(ContactPostDTO dTO);
-        Task<ContactGetDTO> GetFirst();
+        Task<ContactGetDTO?> GetFirst();
     }
 }

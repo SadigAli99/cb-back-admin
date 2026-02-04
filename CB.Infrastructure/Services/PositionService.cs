@@ -28,7 +28,7 @@ namespace CB.Infrastructure.Services
         public async Task<List<PositionGetDTO>> GetAllAsync()
         {
             var entities = await _repository.GetQuery()
-                        .Include(x => x.Branch)
+                        .Include(x => x.Branch!)
                         .ThenInclude(x => x.Translations)
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)

@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int RoadmapOverviewId { get; set; }
         public RoadmapOverview? RoadmapOverview { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

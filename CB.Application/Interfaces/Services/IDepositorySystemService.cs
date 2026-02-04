@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IDepositorySystemService
     {
         Task<bool> CreateOrUpdate(DepositorySystemPostDTO dTO);
-        Task<DepositorySystemGetDTO> GetFirst();
+        Task<DepositorySystemGetDTO?> GetFirst();
     }
 }

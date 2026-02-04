@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int AttestationFileId { get; set; }
         public AttestationFile? AttestationFile { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

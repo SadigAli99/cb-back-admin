@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int CybersecurityStrategyId { get; set; }
         public CybersecurityStrategy? CybersecurityStrategy { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

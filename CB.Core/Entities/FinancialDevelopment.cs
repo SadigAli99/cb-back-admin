@@ -9,6 +9,6 @@ namespace CB.Core.Entities
         public string? Image { get; set; }
         [StringLength(100)]
         public string? PdfFile { get; set; }
-        public List<FinancialDevelopmentTranslation>? Translations { get; set; }
+        public List<FinancialDevelopmentTranslation>Translations {get; set; } = new();
     }
 }

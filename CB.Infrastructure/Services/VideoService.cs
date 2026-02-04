@@ -86,7 +86,7 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity?.Image ?? "");
+                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
                 entity.Image = await dto.File.FileUpload(_env.WebRootPath, "videos");
             }
 
@@ -113,7 +113,7 @@ namespace CB.Infrastructure.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _repository.GetByIdAsync(id);
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            FileManager.FileDelete(_env.WebRootPath, entity?.Image ?? "");
             if (entity is null) return false;
             return await _repository.DeleteAsync(entity);
         }

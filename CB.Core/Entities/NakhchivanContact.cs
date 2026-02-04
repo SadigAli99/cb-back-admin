@@ -8,6 +8,6 @@ namespace CB.Core.Entities
     {
         [StringLength(50000)]
         public string? Map { get; set; }
-        public List<NakhchivanContactTranslation>? Translations { get; set; }
+        public List<NakhchivanContactTranslation>Translations {get; set; } = new();
     }
 }

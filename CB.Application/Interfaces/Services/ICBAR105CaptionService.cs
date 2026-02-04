@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface ICBAR105CaptionService
     {
         Task<bool> CreateOrUpdate(CBAR105CaptionPostDTO dTO);
-        Task<CBAR105CaptionGetDTO> GetFirst();
+        Task<CBAR105CaptionGetDTO?> GetFirst();
     }
 }

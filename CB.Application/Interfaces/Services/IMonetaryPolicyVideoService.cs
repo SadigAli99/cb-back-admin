@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IMonetaryPolicyVideoService
     {
         Task<bool> CreateOrUpdate(MonetaryPolicyVideoPostDTO dTO);
-        Task<MonetaryPolicyVideoGetDTO> GetFirst();
+        Task<MonetaryPolicyVideoGetDTO?> GetFirst();
     }
 }

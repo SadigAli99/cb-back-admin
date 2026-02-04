@@ -7,6 +7,6 @@ namespace CB.Core.Entities
     {
         [StringLength(100)]
         public string? Image { get; set; }
-        public List<AnniversaryCoinTranslation>? Translations { get; set; }
+        public List<AnniversaryCoinTranslation>Translations {get; set; } = new();
     }
 }

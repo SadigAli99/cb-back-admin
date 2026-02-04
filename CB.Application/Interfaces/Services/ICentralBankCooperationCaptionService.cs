@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface ICentralBankCooperationCaptionService
     {
         Task<bool> CreateOrUpdate(CentralBankCooperationCaptionPostDTO dTO);
-        Task<CentralBankCooperationCaptionGetDTO> GetFirst();
+        Task<CentralBankCooperationCaptionGetDTO?> GetFirst();
     }
 }

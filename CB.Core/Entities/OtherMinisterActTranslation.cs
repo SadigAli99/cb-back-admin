@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int OtherMinisterActId { get; set; }
         public OtherMinisterAct? OtherMinisterAct { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

@@ -8,6 +8,6 @@ namespace CB.Core.Entities
     {
         [StringLength(5000)]
         public string? Url { get; set; }
-        public List<FinancialLiteracyCaptionTranslation>? Translations { get; set; }
+        public List<FinancialLiteracyCaptionTranslation>Translations {get; set; } = new();
     }
 }

@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int Month { get; set; }
         public int Year { get; set; }
         public int CitizenApplicationCategoryId { get; set; }
-        public CitizenApplicationCategory? CitizenApplicationCategory { get; set; }
+        public CitizenApplicationCategory CitizenApplicationCategory { get; set; } = null!;
     }
 }

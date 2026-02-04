@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IFinancialLiteracyPortalCaptionService
     {
         Task<bool> CreateOrUpdate(FinancialLiteracyPortalCaptionPostDTO dTO);
-        Task<FinancialLiteracyPortalCaptionGetDTO> GetFirst();
+        Task<FinancialLiteracyPortalCaptionGetDTO?> GetFirst();
     }
 }

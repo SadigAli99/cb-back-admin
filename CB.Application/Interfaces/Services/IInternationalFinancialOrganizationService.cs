@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IInternationalFinancialOrganizationService
     {
         Task<bool> CreateOrUpdate(InternationalFinancialOrganizationPostDTO dTO);
-        Task<InternationalFinancialOrganizationGetDTO> GetFirst();
+        Task<InternationalFinancialOrganizationGetDTO?> GetFirst();
     }
 }

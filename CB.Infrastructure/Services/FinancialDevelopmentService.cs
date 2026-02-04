@@ -94,7 +94,7 @@ namespace CB.Infrastructure.Services
                     dto.FileTitles.TryGetValue(v.Key, out var fileTitle);
 
 
-                    var existingTranslation = financialDevelopment.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = financialDevelopment.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -125,7 +125,7 @@ namespace CB.Infrastructure.Services
 
         public async Task<FinancialDevelopmentGetDTO?> GetFirst()
         {
-            FinancialDevelopment financialDevelopment = await _repository.GetQuery()
+            FinancialDevelopment? financialDevelopment = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);

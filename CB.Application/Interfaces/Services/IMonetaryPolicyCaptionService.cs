@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IMonetaryPolicyCaptionService
     {
         Task<bool> CreateOrUpdate(MonetaryPolicyCaptionPostDTO dTO);
-        Task<MonetaryPolicyCaptionGetDTO> GetFirst();
+        Task<MonetaryPolicyCaptionGetDTO?> GetFirst();
     }
 }

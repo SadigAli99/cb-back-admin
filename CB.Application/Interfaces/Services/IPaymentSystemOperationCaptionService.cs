@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IPaymentSystemOperationCaptionService
     {
         Task<bool> CreateOrUpdate(PaymentSystemOperationCaptionPostDTO dTO);
-        Task<PaymentSystemOperationCaptionGetDTO> GetFirst();
+        Task<PaymentSystemOperationCaptionGetDTO?> GetFirst();
     }
 }

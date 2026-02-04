@@ -8,6 +8,6 @@ namespace CB.Core.Entities
         public double? PercentValue { get; set; } = null;
         public int BankNoteCategoryId { get; set; }
 
-        public BankNoteCategory? BankNoteCategory { get; set; }
+        public BankNoteCategory BankNoteCategory { get; set; } = null!;
     }
 }

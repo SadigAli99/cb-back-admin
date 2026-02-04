@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int InvestmentCompanyId { get; set; }
         public InvestmentCompany? InvestmentCompany { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

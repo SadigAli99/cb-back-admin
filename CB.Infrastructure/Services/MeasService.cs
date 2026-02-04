@@ -105,7 +105,7 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity?.PdfFile ?? "");
+                FileManager.FileDelete(_env.WebRootPath, entity.PdfFile ?? "");
                 entity.PdfFile = await dto.File.FileUpload(_env.WebRootPath, "meas");
             }
 
@@ -134,7 +134,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity?.PdfFile ?? "");
+            FileManager.FileDelete(_env.WebRootPath, entity.PdfFile ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

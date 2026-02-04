@@ -4,6 +4,6 @@ namespace CB.Core.Entities
 {
     public class FinancingActivityCaption : BaseEntity
     {
-        public List<FinancingActivityCaptionTranslation>? Translations { get; set; }
+        public List<FinancingActivityCaptionTranslation>Translations {get; set; } = new();
     }
 }

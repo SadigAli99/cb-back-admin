@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IElectronicMoneyInstitutionCaptionService
     {
         Task<bool> CreateOrUpdate(ElectronicMoneyInstitutionCaptionPostDTO dTO);
-        Task<ElectronicMoneyInstitutionCaptionGetDTO> GetFirst();
+        Task<ElectronicMoneyInstitutionCaptionGetDTO?> GetFirst();
     }
 }

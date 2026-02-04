@@ -1426,7 +1426,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -5671,7 +5671,7 @@ namespace CB.Infrastructure.Migrations
                     b.ToTable("DigitalPayments");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhic", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5685,7 +5685,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicCategoryId")
+                    b.Property<int>("DigitalPaymentInfographicCategoryId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -5696,12 +5696,12 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicCategoryId");
+                    b.HasIndex("DigitalPaymentInfographicCategoryId");
 
-                    b.ToTable("DigitalPaymentInfograhics");
+                    b.ToTable("DigitalPaymentInfographics");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategory", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5720,10 +5720,10 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DigitalPaymentInfograhicCategories");
+                    b.ToTable("DigitalPaymentInfographicCategories");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategoryTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategoryTranslation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5737,7 +5737,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicCategoryId")
+                    b.Property<int>("DigitalPaymentInfographicCategoryId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LanguageId")
@@ -5752,14 +5752,14 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicCategoryId");
+                    b.HasIndex("DigitalPaymentInfographicCategoryId");
 
                     b.HasIndex("LanguageId");
 
-                    b.ToTable("DigitalPaymentInfograhicCategoryTranslations");
+                    b.ToTable("DigitalPaymentInfographicCategoryTranslations");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicItem", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5773,7 +5773,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicId")
+                    b.Property<int>("DigitalPaymentInfographicId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Month")
@@ -5790,12 +5790,12 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicId");
+                    b.HasIndex("DigitalPaymentInfographicId");
 
-                    b.ToTable("DigitalPaymentInfograhicItems");
+                    b.ToTable("DigitalPaymentInfographicItems");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicTranslation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5809,7 +5809,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicId")
+                    b.Property<int>("DigitalPaymentInfographicId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LanguageId")
@@ -5824,11 +5824,11 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicId");
+                    b.HasIndex("DigitalPaymentInfographicId");
 
                     b.HasIndex("LanguageId");
 
-                    b.ToTable("DigitalPaymentInfograhicTranslations");
+                    b.ToTable("DigitalPaymentInfographicTranslations");
                 });
 
             modelBuilder.Entity("CB.Core.Entities.DigitalPaymentReview", b =>
@@ -12313,17 +12313,17 @@ namespace CB.Infrastructure.Migrations
                         {
                             Id = 1,
                             Code = "az",
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 268, DateTimeKind.Utc).AddTicks(917),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(3479),
                             Name = "Azərbaycan",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 268, DateTimeKind.Utc).AddTicks(918)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(3479)
                         },
                         new
                         {
                             Id = 2,
                             Code = "en",
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 268, DateTimeKind.Utc).AddTicks(920),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(3482),
                             Name = "English",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 268, DateTimeKind.Utc).AddTicks(920)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(3482)
                         });
                 });
 
@@ -19215,30 +19215,30 @@ namespace CB.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8390),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4004),
                             Name = "User Read",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8390)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4005)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8392),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4007),
                             Name = "User Create",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8392)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4007)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8393),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4009),
                             Name = "User Edit",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8394)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4009)
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8395),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4010),
                             Name = "User Delete",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8395)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(4010)
                         });
                 });
 
@@ -21281,23 +21281,23 @@ namespace CB.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8160),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(3661),
                             Name = "Admin",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8160)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(3661)
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8163),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(3666),
                             Name = "Moderator",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8164)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(3666)
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8165),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(3667),
                             Name = "Content Manager",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 18, 910, DateTimeKind.Utc).AddTicks(8165)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 397, DateTimeKind.Utc).AddTicks(3668)
                         });
                 });
 
@@ -23176,9 +23176,9 @@ namespace CB.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 268, DateTimeKind.Utc).AddTicks(1065),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(3693),
                             Key = "home",
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 268, DateTimeKind.Utc).AddTicks(1065)
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(3693)
                         });
                 });
 
@@ -23269,31 +23269,31 @@ namespace CB.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 25, DateTimeKind.Utc).AddTicks(9996),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 528, DateTimeKind.Utc).AddTicks(8672),
                             Email = "admin@gmail.com",
-                            PasswordHash = "$2a$11$MlN4o9YRS8JknuqJ5zwvmu5w.7vi1QbMmZ8xRRgUiaZmCOgiS6/4q",
+                            PasswordHash = "$2a$11$kiWpqA7FqgtEUPziPfaomOjJc21uu5aBXd2xBlDZRK55whGWp4X32",
                             RoleId = 1,
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 26, DateTimeKind.Utc),
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 528, DateTimeKind.Utc).AddTicks(8680),
                             Username = "Admin"
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 144, DateTimeKind.Utc).AddTicks(6001),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 657, DateTimeKind.Utc).AddTicks(6205),
                             Email = "moderator@gmail.com",
-                            PasswordHash = "$2a$11$5YfkMm6JNThs933OzxML6esHvDgggiiKdaTXcjeR7sJRrK0FA/3rm",
+                            PasswordHash = "$2a$11$qwNAISS4rFX.TxDfECFj5uwT0Uz7xLJKGqCxpId7m.AvzFB.s7k02",
                             RoleId = 2,
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 144, DateTimeKind.Utc).AddTicks(6007),
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 657, DateTimeKind.Utc).AddTicks(6210),
                             Username = "Moderator"
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 267, DateTimeKind.Utc).AddTicks(9709),
+                            CreatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(2453),
                             Email = "contentmanager@gmail.com",
-                            PasswordHash = "$2a$11$m1TYZ/3.M4eoyncoH.2VrOusTofFE3hBeslkGzpdtPgXnD0Ek5uY6",
+                            PasswordHash = "$2a$11$QpHhu1CVXTfRkX8ff8m/XuagEbd1K/0Z72N1LmvJN1ESC5maESveG",
                             RoleId = 3,
-                            UpdatedAt = new DateTime(2025, 12, 23, 10, 29, 19, 267, DateTimeKind.Utc).AddTicks(9715),
+                            UpdatedAt = new DateTime(2026, 2, 4, 12, 35, 19, 780, DateTimeKind.Utc).AddTicks(2459),
                             Username = "Content Manager"
                         });
                 });
@@ -24383,7 +24383,9 @@ namespace CB.Infrastructure.Migrations
                 {
                     b.HasOne("CB.Core.Entities.Department", "Department")
                         .WithMany()
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Department");
                 });
@@ -25761,22 +25763,22 @@ namespace CB.Infrastructure.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhic", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographic", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhicCategory", "DigitalPaymentInfograhicCategory")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographicCategory", "DigitalPaymentInfographicCategory")
                         .WithMany()
-                        .HasForeignKey("DigitalPaymentInfograhicCategoryId")
+                        .HasForeignKey("DigitalPaymentInfographicCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhicCategory");
+                    b.Navigation("DigitalPaymentInfographicCategory");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategoryTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategoryTranslation", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhicCategory", "DigitalPaymentInfograhicCategory")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographicCategory", "DigitalPaymentInfographicCategory")
                         .WithMany("Translations")
-                        .HasForeignKey("DigitalPaymentInfograhicCategoryId")
+                        .HasForeignKey("DigitalPaymentInfographicCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -25786,27 +25788,27 @@ namespace CB.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhicCategory");
+                    b.Navigation("DigitalPaymentInfographicCategory");
 
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicItem", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicItem", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhic", "DigitalPaymentInfograhic")
-                        .WithMany("DigitalPaymentInfograhicItems")
-                        .HasForeignKey("DigitalPaymentInfograhicId")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographic", "DigitalPaymentInfographic")
+                        .WithMany("DigitalPaymentInfographicItems")
+                        .HasForeignKey("DigitalPaymentInfographicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhic");
+                    b.Navigation("DigitalPaymentInfographic");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicTranslation", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhic", "DigitalPaymentInfograhic")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographic", "DigitalPaymentInfographic")
                         .WithMany("Translations")
-                        .HasForeignKey("DigitalPaymentInfograhicId")
+                        .HasForeignKey("DigitalPaymentInfographicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -25816,7 +25818,7 @@ namespace CB.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhic");
+                    b.Navigation("DigitalPaymentInfographic");
 
                     b.Navigation("Language");
                 });
@@ -31910,14 +31912,14 @@ namespace CB.Infrastructure.Migrations
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhic", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographic", b =>
                 {
-                    b.Navigation("DigitalPaymentInfograhicItems");
+                    b.Navigation("DigitalPaymentInfographicItems");
 
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategory", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategory", b =>
                 {
                     b.Navigation("Translations");
                 });

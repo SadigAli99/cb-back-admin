@@ -19,6 +19,6 @@ namespace CB.Core.Entities
         public string? RefreshToken { get; set; } = null;
         public DateTime? RefreshTokenExpiryTime { get; set; } = null;
         public int RoleId { get; set; }
-        public Role? Role { get; set; }
+        public Role Role { get; set; } = null!;
     }
 }

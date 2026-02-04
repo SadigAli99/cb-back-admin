@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IMoneySignProtectionCaptionService
     {
         Task<bool> CreateOrUpdate(MoneySignProtectionCaptionPostDTO dTO);
-        Task<MoneySignProtectionCaptionGetDTO> GetFirst();
+        Task<MoneySignProtectionCaptionGetDTO?> GetFirst();
     }
 }

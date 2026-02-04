@@ -63,7 +63,7 @@ namespace CB.Infrastructure.Services
                     if (lang == null)
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
-                    var existingTranslation = entity.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = entity.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -71,7 +71,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        entity.Translations?.Add(new MoneySignProtectionCaptionTranslation
+                        entity.Translations.Add(new MoneySignProtectionCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Description = v.Value
@@ -91,14 +91,14 @@ namespace CB.Infrastructure.Services
             MoneySignProtectionCaption? entity = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
-                .Include(x => x.MoneySignHistory)
+                .Include(x => x.MoneySignHistory!)
                 .ThenInclude(x => x.Translations)
                 .FirstOrDefaultAsync(h => h.Id == 1);
 
             if (entity is null) return null;
 
             var data = _mapper.Map<MoneySignProtectionCaptionGetDTO>(entity);
-            data.MoneySignHistoryTitle = entity.MoneySignHistory.Translations.FirstOrDefault(x => x.LanguageId == 1)?.Title;
+            data.MoneySignHistoryTitle = entity?.MoneySignHistory?.Translations.FirstOrDefault(x => x.LanguageId == 1)?.Title;
 
             return data;
         }

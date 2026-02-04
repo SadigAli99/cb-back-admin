@@ -79,7 +79,7 @@ namespace CB.Infrastructure.Services
                     if (lang == null)
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
-                    var existingTranslation = entity.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = entity.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -87,7 +87,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        entity.Translations?.Add(new AnniversaryStampTranslation
+                        entity.Translations.Add(new AnniversaryStampTranslation
                         {
                             LanguageId = lang.Id,
                             Title = v.Value

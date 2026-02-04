@@ -77,7 +77,7 @@ namespace CB.Infrastructure.Services
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
 
-                    var existingTranslation = financialDevelopment.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = financialDevelopment.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -85,7 +85,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        financialDevelopment.Translations?.Add(new VirtualEducationCaptionTranslation
+                        financialDevelopment.Translations.Add(new VirtualEducationCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Title = v.Value,

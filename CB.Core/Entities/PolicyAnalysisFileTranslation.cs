@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int PolicyAnalysisFileId { get; set; }
         public PolicyAnalysisFile? PolicyAnalysisFile { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

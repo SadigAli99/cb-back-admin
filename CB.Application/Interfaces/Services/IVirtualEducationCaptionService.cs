@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IVirtualEducationCaptionService
     {
         Task<bool> CreateOrUpdate(VirtualEducationCaptionPostDTO dTO);
-        Task<VirtualEducationCaptionGetDTO> GetFirst();
+        Task<VirtualEducationCaptionGetDTO?> GetFirst();
     }
 }

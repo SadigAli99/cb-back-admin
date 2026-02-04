@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int CurrencyRegulationLawId { get; set; }
         public CurrencyRegulationLaw? CurrencyRegulationLaw { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

@@ -63,7 +63,7 @@ namespace CB.Infrastructure.Services
                     if (lang == null)
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
-                    var existingTranslation = entity.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = entity.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -88,7 +88,7 @@ namespace CB.Infrastructure.Services
 
         public async Task<LossAdjusterCaptionGetDTO?> GetFirst()
         {
-            LossAdjusterCaption entity = await _repository.GetQuery()
+            LossAdjusterCaption? entity = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);

@@ -5674,7 +5674,7 @@ namespace CB.Infrastructure.Migrations
                     b.ToTable("DigitalPayments");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhic", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5688,7 +5688,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicCategoryId")
+                    b.Property<int>("DigitalPaymentInfographicCategoryId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -5699,12 +5699,12 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicCategoryId");
+                    b.HasIndex("DigitalPaymentInfographicCategoryId");
 
-                    b.ToTable("DigitalPaymentInfograhics");
+                    b.ToTable("DigitalPaymentInfographics");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategory", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5723,10 +5723,10 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("DigitalPaymentInfograhicCategories");
+                    b.ToTable("DigitalPaymentInfographicCategories");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategoryTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategoryTranslation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5740,7 +5740,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicCategoryId")
+                    b.Property<int>("DigitalPaymentInfographicCategoryId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LanguageId")
@@ -5755,14 +5755,14 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicCategoryId");
+                    b.HasIndex("DigitalPaymentInfographicCategoryId");
 
                     b.HasIndex("LanguageId");
 
-                    b.ToTable("DigitalPaymentInfograhicCategoryTranslations");
+                    b.ToTable("DigitalPaymentInfographicCategoryTranslations");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicItem", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5776,7 +5776,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicId")
+                    b.Property<int>("DigitalPaymentInfographicId")
                         .HasColumnType("integer");
 
                     b.Property<int>("Month")
@@ -5793,12 +5793,12 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicId");
+                    b.HasIndex("DigitalPaymentInfographicId");
 
-                    b.ToTable("DigitalPaymentInfograhicItems");
+                    b.ToTable("DigitalPaymentInfographicItems");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicTranslation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -5812,7 +5812,7 @@ namespace CB.Infrastructure.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DigitalPaymentInfograhicId")
+                    b.Property<int>("DigitalPaymentInfographicId")
                         .HasColumnType("integer");
 
                     b.Property<int>("LanguageId")
@@ -5827,11 +5827,11 @@ namespace CB.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DigitalPaymentInfograhicId");
+                    b.HasIndex("DigitalPaymentInfographicId");
 
                     b.HasIndex("LanguageId");
 
-                    b.ToTable("DigitalPaymentInfograhicTranslations");
+                    b.ToTable("DigitalPaymentInfographicTranslations");
                 });
 
             modelBuilder.Entity("CB.Core.Entities.DigitalPaymentReview", b =>
@@ -25764,22 +25764,22 @@ namespace CB.Infrastructure.Migrations
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhic", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographic", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhicCategory", "DigitalPaymentInfograhicCategory")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographicCategory", "DigitalPaymentInfographicCategory")
                         .WithMany()
-                        .HasForeignKey("DigitalPaymentInfograhicCategoryId")
+                        .HasForeignKey("DigitalPaymentInfographicCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhicCategory");
+                    b.Navigation("DigitalPaymentInfographicCategory");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategoryTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategoryTranslation", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhicCategory", "DigitalPaymentInfograhicCategory")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographicCategory", "DigitalPaymentInfographicCategory")
                         .WithMany("Translations")
-                        .HasForeignKey("DigitalPaymentInfograhicCategoryId")
+                        .HasForeignKey("DigitalPaymentInfographicCategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -25789,27 +25789,27 @@ namespace CB.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhicCategory");
+                    b.Navigation("DigitalPaymentInfographicCategory");
 
                     b.Navigation("Language");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicItem", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicItem", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhic", "DigitalPaymentInfograhic")
-                        .WithMany("DigitalPaymentInfograhicItems")
-                        .HasForeignKey("DigitalPaymentInfograhicId")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographic", "DigitalPaymentInfographic")
+                        .WithMany("DigitalPaymentInfographicItems")
+                        .HasForeignKey("DigitalPaymentInfographicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhic");
+                    b.Navigation("DigitalPaymentInfographic");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicTranslation", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicTranslation", b =>
                 {
-                    b.HasOne("CB.Core.Entities.DigitalPaymentInfograhic", "DigitalPaymentInfograhic")
+                    b.HasOne("CB.Core.Entities.DigitalPaymentInfographic", "DigitalPaymentInfographic")
                         .WithMany("Translations")
-                        .HasForeignKey("DigitalPaymentInfograhicId")
+                        .HasForeignKey("DigitalPaymentInfographicId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -25819,7 +25819,7 @@ namespace CB.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("DigitalPaymentInfograhic");
+                    b.Navigation("DigitalPaymentInfographic");
 
                     b.Navigation("Language");
                 });
@@ -31913,14 +31913,14 @@ namespace CB.Infrastructure.Migrations
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhic", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographic", b =>
                 {
-                    b.Navigation("DigitalPaymentInfograhicItems");
+                    b.Navigation("DigitalPaymentInfographicItems");
 
                     b.Navigation("Translations");
                 });
 
-            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfograhicCategory", b =>
+            modelBuilder.Entity("CB.Core.Entities.DigitalPaymentInfographicCategory", b =>
                 {
                     b.Navigation("Translations");
                 });

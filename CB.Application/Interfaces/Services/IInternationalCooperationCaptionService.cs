@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IInternationalCooperationCaptionService
     {
         Task<bool> CreateOrUpdate(InternationalCooperationCaptionPostDTO dTO);
-        Task<InternationalCooperationCaptionGetDTO> GetFirst();
+        Task<InternationalCooperationCaptionGetDTO?> GetFirst();
     }
 }

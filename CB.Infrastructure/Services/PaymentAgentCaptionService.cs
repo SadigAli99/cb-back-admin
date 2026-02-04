@@ -27,18 +27,18 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateOrUpdate(PaymentAgentCaptionPostDTO dto)
         {
             var languages = await _languageRepository.GetAllAsync();
-            PaymentAgentCaption? about = await _repository.GetQuery()
+            PaymentAgentCaption? paymentAgentCaption = await _repository.GetQuery()
                                         .Include(h => h.Translations)
                                         .ThenInclude(ht => ht.Language)
                                         .FirstOrDefaultAsync();
 
             bool result;
 
-            if (about is null)
+            if (paymentAgentCaption is null)
             {
-                about = _mapper.Map<PaymentAgentCaption>(dto);
+                paymentAgentCaption = _mapper.Map<PaymentAgentCaption>(dto);
 
-                about.Translations = dto.Descriptions.Select(v =>
+                paymentAgentCaption.Translations = dto.Descriptions.Select(v =>
                 {
                     var lang = languages.FirstOrDefault(l => l.Code == v.Key);
                     if (lang == null)
@@ -51,11 +51,11 @@ namespace CB.Infrastructure.Services
                     };
                 }).ToList();
 
-                result = await _repository.AddAsync(about);
+                result = await _repository.AddAsync(paymentAgentCaption);
             }
             else
             {
-                _mapper.Map(dto, about);
+                _mapper.Map(dto, paymentAgentCaption);
 
                 foreach (var v in dto.Descriptions)
                 {
@@ -63,7 +63,7 @@ namespace CB.Infrastructure.Services
                     if (lang == null)
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
-                    var existingTranslation = about.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = paymentAgentCaption.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -71,7 +71,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        about.Translations.Add(new PaymentAgentCaptionTranslation
+                        paymentAgentCaption.Translations.Add(new PaymentAgentCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Description = v.Value
@@ -79,7 +79,7 @@ namespace CB.Infrastructure.Services
                     }
                 }
 
-                result = await _repository.UpdateAsync(about);
+                result = await _repository.UpdateAsync(paymentAgentCaption);
             }
 
 
@@ -88,12 +88,12 @@ namespace CB.Infrastructure.Services
 
         public async Task<PaymentAgentCaptionGetDTO?> GetFirst()
         {
-            PaymentAgentCaption about = await _repository.GetQuery()
+            PaymentAgentCaption? paymentAgentCaption = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);
 
-            return about == null ? null : _mapper.Map<PaymentAgentCaptionGetDTO>(about);
+            return paymentAgentCaption == null ? null : _mapper.Map<PaymentAgentCaptionGetDTO>(paymentAgentCaption);
         }
     }
 }

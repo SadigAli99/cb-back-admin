@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface ICurrencyRegulationRightCaptionService
     {
         Task<bool> CreateOrUpdate(CurrencyRegulationRightCaptionPostDTO dTO);
-        Task<CurrencyRegulationRightCaptionGetDTO> GetFirst();
+        Task<CurrencyRegulationRightCaptionGetDTO?> GetFirst();
     }
 }

@@ -27,18 +27,18 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateOrUpdate(HistoryPostDTO dto)
         {
             var languages = await _languageRepository.GetAllAsync();
-            History? hero = await _repository.GetQuery()
+            History? history = await _repository.GetQuery()
                                         .Include(h => h.Translations)
                                         .ThenInclude(ht => ht.Language)
                                         .FirstOrDefaultAsync();
 
             bool result;
 
-            if (hero is null)
+            if (history is null)
             {
-                hero = _mapper.Map<History>(dto);
+                history = _mapper.Map<History>(dto);
 
-                hero.Translations = dto.Titles.Select(v =>
+                history.Translations = dto.Titles.Select(v =>
                 {
                     var lang = languages.FirstOrDefault(l => l.Code == v.Key);
                     if (lang == null)
@@ -54,11 +54,11 @@ namespace CB.Infrastructure.Services
                     };
                 }).ToList();
 
-                result = await _repository.AddAsync(hero);
+                result = await _repository.AddAsync(history);
             }
             else
             {
-                _mapper.Map(dto, hero);
+                _mapper.Map(dto, history);
 
                 foreach (var v in dto.Titles)
                 {
@@ -68,7 +68,7 @@ namespace CB.Infrastructure.Services
 
                     dto.Descriptions.TryGetValue(v.Key, out var description);
 
-                    var existingTranslation = hero.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = history.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -77,7 +77,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        hero.Translations.Add(new HistoryTranslation
+                        history.Translations.Add(new HistoryTranslation
                         {
                             LanguageId = lang.Id,
                             Title = v.Value,
@@ -86,7 +86,7 @@ namespace CB.Infrastructure.Services
                     }
                 }
 
-                result = await _repository.UpdateAsync(hero);
+                result = await _repository.UpdateAsync(history);
             }
 
 
@@ -95,12 +95,12 @@ namespace CB.Infrastructure.Services
 
         public async Task<HistoryGetDTO?> GetFirst()
         {
-            History hero = await _repository.GetQuery()
+            History? history = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);
 
-            return hero == null ? null : _mapper.Map<HistoryGetDTO>(hero);
+            return history == null ? null : _mapper.Map<HistoryGetDTO>(history);
         }
     }
 }

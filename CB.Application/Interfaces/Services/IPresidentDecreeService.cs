@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IPresidentDecreeService
     {
         Task<bool> CreateOrUpdate(PresidentDecreePostDTO dTO);
-        Task<PresidentDecreeGetDTO> GetFirst();
+        Task<PresidentDecreeGetDTO?> GetFirst();
     }
 }

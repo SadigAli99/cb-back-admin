@@ -7,7 +7,7 @@ namespace CB.Shared.Extensions
 {
     public static class FileManager
     {
-        public static async Task<string> FileUpload(this IFormFile file, string rootFolder, string folder)
+        public static async Task<string> FileUpload(this IFormFile? file, string rootFolder, string folder)
         {
             string[] extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif"];
 

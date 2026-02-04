@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IPublicationCaptionService
     {
         Task<bool> CreateOrUpdate(PublicationCaptionPostDTO dTO);
-        Task<PublicationCaptionGetDTO> GetFirst();
+        Task<PublicationCaptionGetDTO?> GetFirst();
     }
 }

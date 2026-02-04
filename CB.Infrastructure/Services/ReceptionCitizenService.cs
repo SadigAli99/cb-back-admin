@@ -30,7 +30,7 @@ namespace CB.Infrastructure.Services
             var entities = await _repository.GetQuery()
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)
-                        .Include(x => x.ReceptionCitizenCategory)
+                        .Include(x => x.ReceptionCitizenCategory!)
                         .ThenInclude(x => x.Translations)
                         .ThenInclude(x => x.Language)
                         .ToListAsync();
@@ -50,7 +50,7 @@ namespace CB.Infrastructure.Services
             var entity = await _repository.GetQuery()
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)
-                        .Include(x => x.ReceptionCitizenCategory)
+                        .Include(x => x.ReceptionCitizenCategory!)
                         .ThenInclude(x => x.Translations)
                         .ThenInclude(x => x.Language)
                         .FirstOrDefaultAsync(b => b.Id == id);

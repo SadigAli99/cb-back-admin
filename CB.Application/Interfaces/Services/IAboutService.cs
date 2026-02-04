@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IAboutService
     {
         Task<bool> CreateOrUpdate(AboutPostDTO dTO);
-        Task<AboutGetDTO> GetFirst();
+        Task<AboutGetDTO?> GetFirst();
     }
 }

@@ -6,6 +6,6 @@ namespace CB.Core.Entities
     {
         public int MoneySignHistoryId { get; set; }
         public MoneySignHistory? MoneySignHistory { get; set; }
-        public List<MoneySignProtectionCaptionTranslation>? Translations { get; set; }
+        public List<MoneySignProtectionCaptionTranslation>Translations {get; set; } = new();
     }
 }

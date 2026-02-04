@@ -10,6 +10,6 @@ namespace CB.Core.Entities
         public string? VideoUrl { get; set; }
         [StringLength(1000)]
         public string? PlaylistUrl { get; set; }
-        public List<FaqVideoTranslation>? Translations { get; set; }
+        public List<FaqVideoTranslation>Translations {get; set; } = new();
     }
 }

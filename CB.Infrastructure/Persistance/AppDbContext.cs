@@ -362,11 +362,11 @@ namespace CB.Infrastructure.Persistance
         public DbSet<GovernmentPaymentPortalTranslation> GovernmentPaymentPortalTranslations { get; set; }
         public DbSet<ProcessingActivity> ProcessingActivities { get; set; }
         public DbSet<ProcessingActivityTranslation> ProcessingActivityTranslations { get; set; }
-        public DbSet<DigitalPaymentInfograhicCategory> DigitalPaymentInfograhicCategories { get; set; }
-        public DbSet<DigitalPaymentInfograhicCategoryTranslation> DigitalPaymentInfograhicCategoryTranslations { get; set; }
-        public DbSet<DigitalPaymentInfograhic> DigitalPaymentInfograhics { get; set; }
-        public DbSet<DigitalPaymentInfograhicTranslation> DigitalPaymentInfograhicTranslations { get; set; }
-        public DbSet<DigitalPaymentInfograhicItem> DigitalPaymentInfograhicItems { get; set; }
+        public DbSet<DigitalPaymentInfographicCategory> DigitalPaymentInfographicCategories { get; set; }
+        public DbSet<DigitalPaymentInfographicCategoryTranslation> DigitalPaymentInfographicCategoryTranslations { get; set; }
+        public DbSet<DigitalPaymentInfographic> DigitalPaymentInfographics { get; set; }
+        public DbSet<DigitalPaymentInfographicTranslation> DigitalPaymentInfographicTranslations { get; set; }
+        public DbSet<DigitalPaymentInfographicItem> DigitalPaymentInfographicItems { get; set; }
         public DbSet<FinancialStabilityCaption> FinancialStabilityCaptions { get; set; }
         public DbSet<FinancialStabilityCaptionTranslation> FinancialStabilityCaptionTranslations { get; set; }
         public DbSet<FinancialStabilityReportCaption> FinancialStabilityReportCaptions { get; set; }

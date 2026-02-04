@@ -1116,7 +1116,7 @@ namespace CB.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DigitalPaymentInfograhicCategories",
+                name: "DigitalPaymentInfographicCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -1127,7 +1127,7 @@ namespace CB.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DigitalPaymentInfograhicCategories", x => x.Id);
+                    table.PrimaryKey("PK_DigitalPaymentInfographicCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -5219,24 +5219,24 @@ namespace CB.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DigitalPaymentInfograhics",
+                name: "DigitalPaymentInfographics",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Url = table.Column<string>(type: "text", nullable: true),
-                    DigitalPaymentInfograhicCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    DigitalPaymentInfographicCategoryId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DigitalPaymentInfograhics", x => x.Id);
+                    table.PrimaryKey("PK_DigitalPaymentInfographics", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DigitalPaymentInfograhics_DigitalPaymentInfograhicCategorie~",
-                        column: x => x.DigitalPaymentInfograhicCategoryId,
-                        principalTable: "DigitalPaymentInfograhicCategories",
+                        name: "FK_DigitalPaymentInfographics_DigitalPaymentInfographicCategorie~",
+                        column: x => x.DigitalPaymentInfographicCategoryId,
+                        principalTable: "DigitalPaymentInfographicCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -7641,13 +7641,13 @@ namespace CB.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DigitalPaymentInfograhicCategoryTranslations",
+                name: "DigitalPaymentInfographicCategoryTranslations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    DigitalPaymentInfograhicCategoryId = table.Column<int>(type: "integer", nullable: false),
+                    DigitalPaymentInfographicCategoryId = table.Column<int>(type: "integer", nullable: false),
                     LanguageId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -7655,15 +7655,15 @@ namespace CB.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DigitalPaymentInfograhicCategoryTranslations", x => x.Id);
+                    table.PrimaryKey("PK_DigitalPaymentInfographicCategoryTranslations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DigitalPaymentInfograhicCategoryTranslations_DigitalPayment~",
-                        column: x => x.DigitalPaymentInfograhicCategoryId,
-                        principalTable: "DigitalPaymentInfograhicCategories",
+                        name: "FK_DigitalPaymentInfographicCategoryTranslations_DigitalPayment~",
+                        column: x => x.DigitalPaymentInfographicCategoryId,
+                        principalTable: "DigitalPaymentInfographicCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DigitalPaymentInfograhicCategoryTranslations_Languages_Lang~",
+                        name: "FK_DigitalPaymentInfographicCategoryTranslations_Languages_Lang~",
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
@@ -15594,7 +15594,7 @@ namespace CB.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DigitalPaymentInfograhicItems",
+                name: "DigitalPaymentInfographicItems",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -15602,30 +15602,30 @@ namespace CB.Infrastructure.Migrations
                     Month = table.Column<int>(type: "integer", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
                     Value = table.Column<double>(type: "double precision", nullable: false),
-                    DigitalPaymentInfograhicId = table.Column<int>(type: "integer", nullable: false),
+                    DigitalPaymentInfographicId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeletedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DigitalPaymentInfograhicItems", x => x.Id);
+                    table.PrimaryKey("PK_DigitalPaymentInfographicItems", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DigitalPaymentInfograhicItems_DigitalPaymentInfograhics_Dig~",
-                        column: x => x.DigitalPaymentInfograhicId,
-                        principalTable: "DigitalPaymentInfograhics",
+                        name: "FK_DigitalPaymentInfographicItems_DigitalPaymentInfographics_Dig~",
+                        column: x => x.DigitalPaymentInfographicId,
+                        principalTable: "DigitalPaymentInfographics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DigitalPaymentInfograhicTranslations",
+                name: "DigitalPaymentInfographicTranslations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Title = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: true),
-                    DigitalPaymentInfograhicId = table.Column<int>(type: "integer", nullable: false),
+                    DigitalPaymentInfographicId = table.Column<int>(type: "integer", nullable: false),
                     LanguageId = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -15633,15 +15633,15 @@ namespace CB.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DigitalPaymentInfograhicTranslations", x => x.Id);
+                    table.PrimaryKey("PK_DigitalPaymentInfographicTranslations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DigitalPaymentInfograhicTranslations_DigitalPaymentInfograh~",
-                        column: x => x.DigitalPaymentInfograhicId,
-                        principalTable: "DigitalPaymentInfograhics",
+                        name: "FK_DigitalPaymentInfographicTranslations_DigitalPaymentInfograh~",
+                        column: x => x.DigitalPaymentInfographicId,
+                        principalTable: "DigitalPaymentInfographics",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DigitalPaymentInfograhicTranslations_Languages_LanguageId",
+                        name: "FK_DigitalPaymentInfographicTranslations_Languages_LanguageId",
                         column: x => x.LanguageId,
                         principalTable: "Languages",
                         principalColumn: "Id",
@@ -18379,33 +18379,33 @@ namespace CB.Infrastructure.Migrations
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DigitalPaymentInfograhicCategoryTranslations_DigitalPayment~",
-                table: "DigitalPaymentInfograhicCategoryTranslations",
-                column: "DigitalPaymentInfograhicCategoryId");
+                name: "IX_DigitalPaymentInfographicCategoryTranslations_DigitalPayment~",
+                table: "DigitalPaymentInfographicCategoryTranslations",
+                column: "DigitalPaymentInfographicCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DigitalPaymentInfograhicCategoryTranslations_LanguageId",
-                table: "DigitalPaymentInfograhicCategoryTranslations",
+                name: "IX_DigitalPaymentInfographicCategoryTranslations_LanguageId",
+                table: "DigitalPaymentInfographicCategoryTranslations",
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DigitalPaymentInfograhicItems_DigitalPaymentInfograhicId",
-                table: "DigitalPaymentInfograhicItems",
-                column: "DigitalPaymentInfograhicId");
+                name: "IX_DigitalPaymentInfographicItems_DigitalPaymentInfographicId",
+                table: "DigitalPaymentInfographicItems",
+                column: "DigitalPaymentInfographicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DigitalPaymentInfograhics_DigitalPaymentInfograhicCategoryId",
-                table: "DigitalPaymentInfograhics",
-                column: "DigitalPaymentInfograhicCategoryId");
+                name: "IX_DigitalPaymentInfographics_DigitalPaymentInfographicCategoryId",
+                table: "DigitalPaymentInfographics",
+                column: "DigitalPaymentInfographicCategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DigitalPaymentInfograhicTranslations_DigitalPaymentInfograh~",
-                table: "DigitalPaymentInfograhicTranslations",
-                column: "DigitalPaymentInfograhicId");
+                name: "IX_DigitalPaymentInfographicTranslations_DigitalPaymentInfograh~",
+                table: "DigitalPaymentInfographicTranslations",
+                column: "DigitalPaymentInfographicId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DigitalPaymentInfograhicTranslations_LanguageId",
-                table: "DigitalPaymentInfograhicTranslations",
+                name: "IX_DigitalPaymentInfographicTranslations_LanguageId",
+                table: "DigitalPaymentInfographicTranslations",
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
@@ -21633,13 +21633,13 @@ namespace CB.Infrastructure.Migrations
                 name: "DevelopmentArticleTranslations");
 
             migrationBuilder.DropTable(
-                name: "DigitalPaymentInfograhicCategoryTranslations");
+                name: "DigitalPaymentInfographicCategoryTranslations");
 
             migrationBuilder.DropTable(
-                name: "DigitalPaymentInfograhicItems");
+                name: "DigitalPaymentInfographicItems");
 
             migrationBuilder.DropTable(
-                name: "DigitalPaymentInfograhicTranslations");
+                name: "DigitalPaymentInfographicTranslations");
 
             migrationBuilder.DropTable(
                 name: "DigitalPaymentReviewTranslations");
@@ -22719,7 +22719,7 @@ namespace CB.Infrastructure.Migrations
                 name: "DevelopmentArticles");
 
             migrationBuilder.DropTable(
-                name: "DigitalPaymentInfograhics");
+                name: "DigitalPaymentInfographics");
 
             migrationBuilder.DropTable(
                 name: "DigitalPaymentReviews");
@@ -23442,7 +23442,7 @@ namespace CB.Infrastructure.Migrations
                 name: "CustomerDocuments");
 
             migrationBuilder.DropTable(
-                name: "DigitalPaymentInfograhicCategories");
+                name: "DigitalPaymentInfographicCategories");
 
             migrationBuilder.DropTable(
                 name: "Directors");

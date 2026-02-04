@@ -4,6 +4,6 @@ namespace CB.Core.Entities
 {
     public class DepositorySystem : BaseEntity
     {
-        public List<DepositorySystemTranslation>? Translations { get; set; }
+        public List<DepositorySystemTranslation>Translations {get; set; } = new();
     }
 }

@@ -84,7 +84,7 @@ namespace CB.Infrastructure.Services
 
                     dto.Descriptions.TryGetValue(v.Key, out var description);
 
-                    var existingTranslation = entity.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = entity.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -92,7 +92,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        entity.Translations?.Add(new AnniversaryCoinTranslation
+                        entity.Translations.Add(new AnniversaryCoinTranslation
                         {
                             LanguageId = lang.Id,
                             Title = v.Value,

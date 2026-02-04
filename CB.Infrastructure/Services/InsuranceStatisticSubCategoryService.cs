@@ -28,7 +28,7 @@ namespace CB.Infrastructure.Services
         public async Task<List<InsuranceStatisticSubCategoryGetDTO>> GetAllAsync()
         {
             var entities = await _repository.GetQuery()
-                        .Include(x => x.InsuranceStatisticCategory)
+                        .Include(x => x.InsuranceStatisticCategory!)
                         .ThenInclude(x => x.Translations)
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)
@@ -45,6 +45,8 @@ namespace CB.Infrastructure.Services
         public async Task<InsuranceStatisticSubCategoryGetDTO?> GetByIdAsync(int id)
         {
             var entity = await _repository.GetQuery()
+                        .Include(x => x.InsuranceStatisticCategory!)
+                        .ThenInclude(x => x.Translations)
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)
                         .FirstOrDefaultAsync(b => b.Id == id);

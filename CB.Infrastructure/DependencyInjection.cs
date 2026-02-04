@@ -65,8 +65,7 @@ namespace CB.Infrastructure
             #region Add Database Connection
             services.AddDbContext<AppDbContext>(options =>
             {
-                // options.UseNpgsql(configuration.GetConnectionString("CBARConnection"));
-                options.UseSqlServer(configuration.GetConnectionString("CBARConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("CBARConnection"));
             });
 
             #endregion
@@ -278,9 +277,9 @@ namespace CB.Infrastructure
             services.AddScoped<IInterbankCardCenterService, InterbankCardCenterService>();
             services.AddScoped<IGovernmentPaymentPortalService, GovernmentPaymentPortalService>();
             services.AddScoped<IProcessingActivityService, ProcessingActivityService>();
-            services.AddScoped<IDigitalPaymentInfograhicCategoryService, DigitalPaymentInfograhicCategoryService>();
-            services.AddScoped<IDigitalPaymentInfograhicService, DigitalPaymentInfograhicService>();
-            services.AddScoped<IDigitalPaymentInfograhicItemService, DigitalPaymentInfograhicItemService>();
+            services.AddScoped<IDigitalPaymentInfographicCategoryService, DigitalPaymentInfographicCategoryService>();
+            services.AddScoped<IDigitalPaymentInfographicService, DigitalPaymentInfographicService>();
+            services.AddScoped<IDigitalPaymentInfographicItemService, DigitalPaymentInfographicItemService>();
             services.AddScoped<IFinancialStabilityCaptionService, FinancialStabilityCaptionService>();
             services.AddScoped<IFinancialStabilityReportCaptionService, FinancialStabilityReportCaptionService>();
             services.AddScoped<IFinancialStabilityReportService, FinancialStabilityReportService>();

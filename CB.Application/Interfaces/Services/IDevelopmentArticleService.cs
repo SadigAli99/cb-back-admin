@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IDevelopmentArticleService
     {
         Task<bool> CreateOrUpdate(DevelopmentArticlePostDTO dTO);
-        Task<DevelopmentArticleGetDTO> GetFirst();
+        Task<DevelopmentArticleGetDTO?> GetFirst();
     }
 }

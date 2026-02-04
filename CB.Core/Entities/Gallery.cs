@@ -6,6 +6,6 @@ namespace CB.Core.Entities
         public DateTime Date { get; set; }
         public string? Image { get; set; } = null!;
         public List<GalleryTranslation> Translations { get; set; } = new();
-        public List<GalleryImage>? Images { get; set; } = new();
+        public List<GalleryImage> Images { get; set; } = new();
     }
 }

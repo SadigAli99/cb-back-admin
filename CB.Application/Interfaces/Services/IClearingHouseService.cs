@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IClearingHouseService
     {
         Task<bool> CreateOrUpdate(ClearingHousePostDTO dTO);
-        Task<ClearingHouseGetDTO> GetFirst();
+        Task<ClearingHouseGetDTO?> GetFirst();
     }
 }

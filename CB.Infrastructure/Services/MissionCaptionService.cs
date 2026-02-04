@@ -27,18 +27,18 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateOrUpdate(MissionCaptionPostDTO dto)
         {
             var languages = await _languageRepository.GetAllAsync();
-            MissionCaption? hero = await _repository.GetQuery()
+            MissionCaption? missionCaption = await _repository.GetQuery()
                                         .Include(h => h.Translations)
                                         .ThenInclude(ht => ht.Language)
                                         .FirstOrDefaultAsync();
 
             bool result;
 
-            if (hero is null)
+            if (missionCaption is null)
             {
-                hero = _mapper.Map<MissionCaption>(dto);
+                missionCaption = _mapper.Map<MissionCaption>(dto);
 
-                hero.Translations = dto.Titles.Select(v =>
+                missionCaption.Translations = dto.Titles.Select(v =>
                 {
                     var lang = languages.FirstOrDefault(l => l.Code == v.Key);
                     if (lang == null)
@@ -54,11 +54,11 @@ namespace CB.Infrastructure.Services
                     };
                 }).ToList();
 
-                result = await _repository.AddAsync(hero);
+                result = await _repository.AddAsync(missionCaption);
             }
             else
             {
-                _mapper.Map(dto, hero);
+                _mapper.Map(dto, missionCaption);
 
                 foreach (var v in dto.Titles)
                 {
@@ -68,7 +68,7 @@ namespace CB.Infrastructure.Services
 
                     dto.Descriptions.TryGetValue(v.Key, out var description);
 
-                    var existingTranslation = hero.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = missionCaption.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -77,7 +77,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        hero.Translations.Add(new MissionCaptionTranslation
+                        missionCaption.Translations.Add(new MissionCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Title = v.Value,
@@ -86,7 +86,7 @@ namespace CB.Infrastructure.Services
                     }
                 }
 
-                result = await _repository.UpdateAsync(hero);
+                result = await _repository.UpdateAsync(missionCaption);
             }
 
 
@@ -95,12 +95,14 @@ namespace CB.Infrastructure.Services
 
         public async Task<MissionCaptionGetDTO?> GetFirst()
         {
-            MissionCaption hero = await _repository.GetQuery()
+            MissionCaption? missionCaption = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
-                .FirstOrDefaultAsync(h => h.Id == 1);
+                .FirstOrDefaultAsync();
 
-            return hero == null ? null : _mapper.Map<MissionCaptionGetDTO>(hero);
+
+
+            return missionCaption == null ? null : _mapper.Map<MissionCaptionGetDTO>(missionCaption);
         }
     }
 }

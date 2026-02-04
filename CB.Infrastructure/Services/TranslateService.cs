@@ -120,7 +120,7 @@ namespace CB.Infrastructure.Services
             if (entity is null)
                 return key;
 
-            string value = entity.Translations?.FirstOrDefault(tt => tt.Language.Code == key)?.Value ?? "";
+            string value = entity.Translations.FirstOrDefault(tt => tt.Language.Code == key)?.Value ?? "";
 
             return !string.IsNullOrEmpty(value) ? value : key;
         }

@@ -32,7 +32,7 @@ namespace CB.Infrastructure.Services
             if (id != default(int)) query = query.Where(x => x.VacancyId == id);
 
             var entities = await query
-                        .Include(x => x.Vacancy)
+                        .Include(x => x.Vacancy!)
                         .ThenInclude(x => x.Translations)
                         .ThenInclude(x => x.Language)
                         .Include(b => b.Translations)
@@ -45,7 +45,7 @@ namespace CB.Infrastructure.Services
         public async Task<VacancyDetailGetDTO?> GetByIdAsync(int id)
         {
             var entity = await _repository.GetQuery()
-                        .Include(x => x.Vacancy)
+                        .Include(x => x.Vacancy!)
                         .ThenInclude(x => x.Translations)
                         .ThenInclude(x => x.Language)
                         .Include(b => b.Translations)

@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IPolicyAnalysisService
     {
         Task<bool> CreateOrUpdate(PolicyAnalysisPostDTO dTO);
-        Task<PolicyAnalysisGetDTO> GetFirst();
+        Task<PolicyAnalysisGetDTO?> GetFirst();
     }
 }

@@ -27,18 +27,18 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateOrUpdate(StatisticCaptionPostDTO dto)
         {
             var languages = await _languageRepository.GetAllAsync();
-            StatisticCaption? hero = await _repository.GetQuery()
+            StatisticCaption? statisticCaption = await _repository.GetQuery()
                                         .Include(h => h.Translations)
                                         .ThenInclude(ht => ht.Language)
                                         .FirstOrDefaultAsync();
 
             bool result;
 
-            if (hero is null)
+            if (statisticCaption is null)
             {
-                hero = _mapper.Map<StatisticCaption>(dto);
+                statisticCaption = _mapper.Map<StatisticCaption>(dto);
 
-                hero.Translations = dto.Descriptions.Select(v =>
+                statisticCaption.Translations = dto.Descriptions.Select(v =>
                 {
                     var lang = languages.FirstOrDefault(l => l.Code == v.Key);
                     if (lang == null)
@@ -51,11 +51,11 @@ namespace CB.Infrastructure.Services
                     };
                 }).ToList();
 
-                result = await _repository.AddAsync(hero);
+                result = await _repository.AddAsync(statisticCaption);
             }
             else
             {
-                _mapper.Map(dto, hero);
+                _mapper.Map(dto, statisticCaption);
 
                 foreach (var v in dto.Descriptions)
                 {
@@ -63,7 +63,7 @@ namespace CB.Infrastructure.Services
                     if (lang == null)
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
-                    var existingTranslation = hero.Translations?.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = statisticCaption.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -71,7 +71,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        hero.Translations.Add(new StatisticCaptionTranslation
+                        statisticCaption.Translations.Add(new StatisticCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Description = v.Value
@@ -79,7 +79,7 @@ namespace CB.Infrastructure.Services
                     }
                 }
 
-                result = await _repository.UpdateAsync(hero);
+                result = await _repository.UpdateAsync(statisticCaption);
             }
 
 
@@ -88,12 +88,12 @@ namespace CB.Infrastructure.Services
 
         public async Task<StatisticCaptionGetDTO?> GetFirst()
         {
-            StatisticCaption hero = await _repository.GetQuery()
+            StatisticCaption? statisticCaption = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);
 
-            return hero == null ? null : _mapper.Map<StatisticCaptionGetDTO>(hero);
+            return statisticCaption == null ? null : _mapper.Map<StatisticCaptionGetDTO>(statisticCaption);
         }
     }
 }

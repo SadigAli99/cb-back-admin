@@ -7,6 +7,6 @@ namespace CB.Core.Entities
     {
         [StringLength(255)]
         public string Key { get; set; } = null!;
-        public List<TranslateTranslation>? Translations { get; set; }
+        public List<TranslateTranslation>Translations {get; set; } = new();
     }
 }

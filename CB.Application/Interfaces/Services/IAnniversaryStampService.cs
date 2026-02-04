@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IAnniversaryStampService
     {
         Task<bool> CreateOrUpdate(AnniversaryStampPostDTO dTO);
-        Task<AnniversaryStampGetDTO> GetFirst();
+        Task<AnniversaryStampGetDTO?> GetFirst();
     }
 }

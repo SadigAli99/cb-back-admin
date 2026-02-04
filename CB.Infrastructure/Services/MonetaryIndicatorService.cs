@@ -22,7 +22,7 @@ namespace CB.Infrastructure.Services
         public async Task<List<MonetaryIndicatorGetDTO>> GetAllAsync()
         {
             var entities = await _repository.GetQuery()
-                            .Include(x => x.MonetaryIndicatorCategory)
+                            .Include(x => x.MonetaryIndicatorCategory!)
                             .ThenInclude(x => x.Translations)
                             .Where(x => x.DeletedAt == null)
                             .OrderByDescending(x => x.Date)

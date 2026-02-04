@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IEKYCService
     {
         Task<bool> CreateOrUpdate(EKYCPostDTO dTO);
-        Task<EKYCGetDTO> GetFirst();
+        Task<EKYCGetDTO?> GetFirst();
     }
 }

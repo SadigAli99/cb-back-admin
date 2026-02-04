@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IHeroService
     {
         Task<bool> CreateOrUpdate(HeroPostDTO dTO);
-        Task<HeroGetDTO> GetFirst();
+        Task<HeroGetDTO?> GetFirst();
     }
 }

@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int PaymentSystemOperationId { get; set; }
         public PaymentSystemOperation? PaymentSystemOperation { get; set; }
         public int LanguageId { get; set; }
-        public Language? Language { get; set; }
+        public Language Language { get; set; } = new();
     }
 }

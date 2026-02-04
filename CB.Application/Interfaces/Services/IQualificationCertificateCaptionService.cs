@@ -6,6 +6,6 @@ namespace CB.Application.Interfaces.Services
     public interface IQualificationCertificateCaptionService
     {
         Task<bool> CreateOrUpdate(QualificationCertificateCaptionPostDTO dTO);
-        Task<QualificationCertificateCaptionGetDTO> GetFirst();
+        Task<QualificationCertificateCaptionGetDTO?> GetFirst();
     }
 }
