@@ -7,13 +7,15 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 // Services
-// builder.Host.UseSerilog((context, services, configuration) =>
-// {
-//     configuration.ReadFrom.Configuration(context.Configuration)
-//                  .ReadFrom.Services(services)
-//                  .Enrich.FromLogContext();
-// });
+builder.Host.UseSerilog((context, services, configuration) =>
+{
+    configuration.ReadFrom.Configuration(context.Configuration)
+                 .ReadFrom.Services(services)
+                 .Enrich.FromLogContext();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
 builder.Services.AddSwaggerGen(c =>
@@ -51,7 +53,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// app.UseSerilogRequestLogging();
+app.UseSerilogRequestLogging();
 
 // Pipeline
 

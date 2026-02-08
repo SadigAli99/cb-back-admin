@@ -1,8 +1,11 @@
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace CB.Core.Entities
 {
     public class Blog : BaseEntity
     {
+        [Column("date")]
         public DateTime Date { get; set; }
         public string? Image { get; set; } = null!;
         public bool IsFocused { get; set; } = false;
