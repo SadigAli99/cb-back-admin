@@ -11,12 +11,12 @@ namespace CB.Web.Controllers
     [Route("/api/[controller]")]
     [ApiController]
     [Authorize]
-    public class InstantPaymentSystemControlFileler : ControllerBase
+    public class InstantPaymentSystemController : ControllerBase
     {
         private readonly IInstantPaymentSystemService _instantPaymentSystemService;
         private readonly IValidator<InstantPaymentSystemPostDTO> _validator;
 
-        public InstantPaymentSystemControlFileler(
+        public InstantPaymentSystemController(
             IInstantPaymentSystemService instantPaymentSystemService,
              IValidator<InstantPaymentSystemPostDTO> validator
               )
