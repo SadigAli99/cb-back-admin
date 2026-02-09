@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int InsurerLawId { get; set; }
         public InsurerLaw? InsurerLaw { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

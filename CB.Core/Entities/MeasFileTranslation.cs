@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int MeasFileId { get; set; }
         public MeasFile? MeasFile { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

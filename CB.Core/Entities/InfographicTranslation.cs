@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int InfographicId { get; set; }
         public Infographic? Infographic { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int CapitalMarketLawId { get; set; }
         public CapitalMarketLaw? CapitalMarketLaw { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

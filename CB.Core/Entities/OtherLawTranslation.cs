@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int OtherLawId { get; set; }
         public OtherLaw? OtherLaw { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

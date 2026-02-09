@@ -15,6 +15,6 @@ namespace CB.Core.Entities
         public int PaymentSystemControlId { get; set; }
         public PaymentSystemControl? PaymentSystemControl { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

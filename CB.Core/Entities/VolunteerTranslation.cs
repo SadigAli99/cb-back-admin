@@ -12,6 +12,6 @@ namespace CB.Core.Entities
         public int VolunteerId { get; set; }
         public Volunteer? Volunteer { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

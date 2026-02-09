@@ -10,6 +10,6 @@ namespace CB.Core.Entities
         public int MarketInformationId { get; set; }
         public MarketInformation? MarketInformation { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

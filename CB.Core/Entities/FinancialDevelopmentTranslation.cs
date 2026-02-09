@@ -16,6 +16,6 @@ namespace CB.Core.Entities
         public int FinancialDevelopmentId { get; set; }
         public FinancialDevelopment? FinancialDevelopment { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

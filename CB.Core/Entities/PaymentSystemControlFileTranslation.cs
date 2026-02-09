@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int PaymentSystemControlFileId { get; set; }
         public PaymentSystemControlFile? PaymentSystemControlFile { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

@@ -13,6 +13,6 @@ namespace CB.Core.Entities
         public int MonetaryPolicyDirectionId { get; set; }
         public MonetaryPolicyDirection? MonetaryPolicyDirection { get; set; }
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }

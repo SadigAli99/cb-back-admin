@@ -11,6 +11,6 @@ namespace CB.Core.Entities
         public int FraudStatisticId { get; set; }
         public FraudStatistic FraudStatistic { get; set; } = null!;
         public int LanguageId { get; set; }
-        public Language Language { get; set; } = new();
+        public Language Language { get; set; } = null!;
     }
 }
