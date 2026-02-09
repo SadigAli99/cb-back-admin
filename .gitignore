@@ -1,3 +1,4 @@
 **/bin
 **/obj
 /publish/
+CB.Web/appsettings.json
