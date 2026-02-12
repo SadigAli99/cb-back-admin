@@ -4,7 +4,6 @@ using CB.Application.DTOs.CustomerFeedback;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -14,19 +13,16 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<CustomerFeedback> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public CustomerFeedbackService(
             IGenericRepository<CustomerFeedback> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<CustomerFeedbackGetDTO>> GetAllAsync()

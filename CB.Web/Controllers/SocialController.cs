@@ -17,19 +17,19 @@ namespace CB.Web.Controllers
         private readonly ISocialService _socialService;
         private readonly SocialCreateValidator _createValidator;
         private readonly SocialEditValidator _editValidator;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
 
         public SocialController(
             ISocialService socialService,
             SocialCreateValidator createValidator,
             SocialEditValidator editValidator,
-            IWebHostEnvironment env
+            IFileService fileService
         )
         {
             _socialService = socialService;
             _createValidator = createValidator;
             _editValidator = editValidator;
-            _env = env;
+            _fileService = fileService;
         }
 
         // GET: /api/social
@@ -60,7 +60,7 @@ namespace CB.Web.Controllers
             ValidationResult validationResult = await _createValidator.ValidateAsync(dto);
             if (!validationResult.IsValid)
                 return BadRequest(new { status = "error", messages = validationResult.Errors.Select(e => e.ErrorMessage) });
-            dto.Icon = await dto.File.FileUpload(_env.WebRootPath, "socials");
+            dto.Icon = await _fileService.UploadAsync(dto.File, "socials");
             var created = await _socialService.CreateAsync(dto);
             if (!created)
             {
@@ -82,8 +82,8 @@ namespace CB.Web.Controllers
                 return BadRequest(new { status = "error", messages = validationResult.Errors.Select(e => e.ErrorMessage) });
             if (dto.File != null)
             {
-                dto.Icon = await dto.File.FileUpload(_env.WebRootPath, "socials");
-                FileManager.FileDelete(_env.WebRootPath, social?.Icon ?? "");
+                dto.Icon = await _fileService.UploadAsync(dto.File, "socials");
+                _fileService.Delete(social?.Icon ?? "");
             }
 
             var updated = await _socialService.UpdateAsync(id, dto);
@@ -102,7 +102,12 @@ namespace CB.Web.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var item = await _socialService.GetByIdAsync(id);
-            FileManager.FileDelete(_env.WebRootPath, item?.Icon ?? "");
+            if (item == null)
+            {
+                Log.Warning("Sosial şəbəkə məlumatının silinməsi uğursuzdur : Id = {@Id}", id);
+                return NotFound();
+            }
+            _fileService.Delete(item.Icon);
             var deleted = await _socialService.DeleteAsync(id);
             if (!deleted)
             {

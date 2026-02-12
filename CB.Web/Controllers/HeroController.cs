@@ -14,15 +14,15 @@ namespace CB.Web.Controllers
     [Authorize]
     public class HeroController : ControllerBase
     {
-        private readonly IHeroService _heroService;
         private readonly IValidator<HeroPostDTO> _validator;
-        private readonly IWebHostEnvironment _env;
+        private readonly IHeroService _heroService;
+        private readonly IFileService _fileService;
 
-        public HeroController(IHeroService heroService, IValidator<HeroPostDTO> validator, IWebHostEnvironment env)
+        public HeroController(IHeroService heroService, IValidator<HeroPostDTO> validator, IFileService fileService)
         {
             _heroService = heroService;
             _validator = validator;
-            _env = env;
+            _fileService = fileService;
         }
 
         [HttpGet]
@@ -45,10 +45,10 @@ namespace CB.Web.Controllers
                 var current = await _heroService.GetFirst();
                 if (current != null && !string.IsNullOrEmpty(current.Image))
                 {
-                    FileManager.FileDelete(_env.WebRootPath, current.Image);
+                    _fileService.Delete(current.Image);
                 }
 
-                dto.Image = await dto.File.FileUpload(_env.WebRootPath, "heros");
+                dto.Image = await _fileService.UploadAsync(dto.File, "heros");
             }
 
             await _heroService.CreateOrUpdate(dto);

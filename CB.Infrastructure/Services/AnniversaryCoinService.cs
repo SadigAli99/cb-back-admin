@@ -3,30 +3,28 @@ using CB.Application.DTOs.AnniversaryCoin;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
 {
     public class AnniversaryCoinService : IAnniversaryCoinService
     {
-        private readonly IGenericRepository<AnniversaryCoin> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<AnniversaryCoin> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public AnniversaryCoinService(
-            IMapper mapper,
-            IGenericRepository<AnniversaryCoin> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IGenericRepository<AnniversaryCoin> repository,
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _env = env;
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(AnniversaryCoinPostDTO dto)
@@ -45,7 +43,7 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    entity.Image = await dto.File.FileUpload(_env.WebRootPath, "anniversary-coins");
+                    entity.Image = await _fileService.UploadAsync(dto.File, "anniversary-coins");
                 }
 
                 entity.Translations = dto.Titles.Select(v =>
@@ -72,8 +70,8 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    entity.Image = await dto.File.FileUpload(_env.WebRootPath, "anniversary-coins");
-                    FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+                    entity.Image = await _fileService.UploadAsync(dto.File, "anniversary-coins");
+                    _fileService.Delete(entity.Image);
                 }
 
                 foreach (var v in dto.Titles)

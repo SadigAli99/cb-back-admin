@@ -3,8 +3,6 @@ using CB.Application.DTOs.VirtualEducationCaption;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -13,20 +11,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<VirtualEducationCaption> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public VirtualEducationCaptionService(
             IMapper mapper,
             IGenericRepository<VirtualEducationCaption> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IFileService fileService
         )
         {
             _mapper = mapper;
             _repository = repository;
             _languageRepository = languageRepository;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<bool> CreateOrUpdate(VirtualEducationCaptionPostDTO dto)
@@ -42,7 +40,7 @@ namespace CB.Infrastructure.Services
             if (financialDevelopment is null)
             {
                 financialDevelopment = _mapper.Map<VirtualEducationCaption>(dto);
-                if (dto.File != null) financialDevelopment.Image = await dto.File.FileUpload(_env.WebRootPath, "virtual-education-captions");
+                if (dto.File != null) financialDevelopment.Image = await _fileService.UploadAsync(dto.File, "virtual-education-captions");
 
 
                 financialDevelopment.Translations = dto.Titles.Select(v =>
@@ -66,8 +64,8 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, financialDevelopment.Image ?? "");
-                    financialDevelopment.Image = await dto.File.FileUpload(_env.WebRootPath, "virtual-education-captions");
+                    _fileService.Delete( financialDevelopment.Image ?? "");
+                    financialDevelopment.Image = await _fileService.UploadAsync(dto.File, "virtual-education-captions");
                 }
 
                 foreach (var v in dto.Titles)

@@ -4,8 +4,6 @@ using CB.Application.DTOs.InstantPaymentFAQ;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -22,8 +20,8 @@ namespace CB.Infrastructure.Services
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _repository = repository;
             _mapper = mapper;
         }
 

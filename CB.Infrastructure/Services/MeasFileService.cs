@@ -4,8 +4,6 @@ using CB.Application.DTOs.MeasFile;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -15,19 +13,19 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<MeasFile> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
 
         public MeasFileService(
             IGenericRepository<MeasFile> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<MeasFileGetDTO>> GetAllAsync()
@@ -55,7 +53,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<MeasFile>(dto);
-            entity.File = await dto.File.FileUpload(_env.WebRootPath, "meas-files");
+            entity.File = await _fileService.UploadAsync(dto.File, "meas-files");
             entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             entity.Translations = dto.Titles.Select(t =>
             {
@@ -90,8 +88,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
-                entity.File = await dto.File.FileUpload(_env.WebRootPath, "meas-files");
+                _fileService.Delete( entity.File ?? "");
+                entity.File = await _fileService.UploadAsync(dto.File, "meas-files");
                 entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             }
 
@@ -123,7 +121,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
+            _fileService.Delete( entity.File ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

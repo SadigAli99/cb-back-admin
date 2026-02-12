@@ -4,9 +4,6 @@ using CB.Application.DTOs.Gallery;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,22 +11,22 @@ namespace CB.Infrastructure.Services
 {
     public class GalleryService : IGalleryService
     {
-        private readonly IGenericRepository<Gallery> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<Gallery> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public GalleryService(
-            IGenericRepository<Gallery> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IGenericRepository<Gallery> repository,
+            IFileService fileService,
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<GalleryGetDTO>> GetAllAsync()
@@ -68,7 +65,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<Gallery>(dto);
-            entity.Image = await dto.ImageFile.FileUpload(_env.WebRootPath, "galleries");
+            entity.Image = await _fileService.UploadAsync(dto.ImageFile, "galleries");
             entity.Translations = dto.Titles.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -91,7 +88,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new GalleryImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "galleries"),
+                    Image = await _fileService.UploadAsync(file, "galleries"),
                 });
             }
 
@@ -112,8 +109,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.ImageFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                entity.Image = await dto.ImageFile.FileUpload(_env.WebRootPath, "galleries");
+                _fileService.Delete(entity.Image);
+                entity.Image = await _fileService.UploadAsync(dto.ImageFile, "galleries");
             }
 
             var languages = await _languageRepository.GetAllAsync();
@@ -140,7 +137,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new GalleryImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "galleries"),
+                    Image = await _fileService.UploadAsync(file, "galleries"),
                 });
             }
 
@@ -154,7 +151,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            _fileService.Delete(entity.Image);
             return await _repository.DeleteAsync(entity);
         }
 
@@ -169,7 +166,7 @@ namespace CB.Infrastructure.Services
 
             var image = entity.Images.FirstOrDefault(i => i.Id == imageId);
             if (image is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, image.Image);
+            _fileService.Delete(image.Image);
             entity.Images.Remove(image);
 
             return await _repository.UpdateAsync(entity);

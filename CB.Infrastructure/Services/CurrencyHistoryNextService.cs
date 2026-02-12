@@ -4,8 +4,6 @@ using CB.Application.DTOs.CurrencyHistoryNext;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Core.Enums;
-using CB.Shared.Extensions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,22 +15,16 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<CurrencyHistoryNext> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
-        private readonly IConfiguration _config;
 
         public CurrencyHistoryNextService(
             IGenericRepository<CurrencyHistoryNext> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
-            IConfiguration config,
             IMapper mapper
         )
         {
             _languageRepository = languageRepository;
             _repository = repository;
             _mapper = mapper;
-            _config = config;
-            _env = env;
         }
 
         public async Task<List<CurrencyHistoryNextGetDTO>> GetAllAsync()

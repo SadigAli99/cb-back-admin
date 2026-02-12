@@ -3,30 +3,28 @@ using CB.Application.DTOs.Contact;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
 {
     public class ContactService : IContactService
     {
-        private readonly IGenericRepository<Contact> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IGenericRepository<Contact> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public ContactService(
-            IMapper mapper,
-            IGenericRepository<Contact> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IGenericRepository<Contact> repository,
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
-            _env = env;
+            _fileService = fileService;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(ContactPostDTO dto)
@@ -44,7 +42,7 @@ namespace CB.Infrastructure.Services
                 contact = _mapper.Map<Contact>(dto);
                 if (dto.File != null)
                 {
-                    contact.ReceptionSchedule = await dto.File.FileUpload(_env.WebRootPath, "contacts");
+                    contact.ReceptionSchedule = await _fileService.UploadAsync(dto.File, "contacts");
                     float fileSize = (float)Math.Round(dto.File.Length / 1024f, 2);
                     contact.FileSize = $"{fileSize} KB";
                 }
@@ -72,8 +70,8 @@ namespace CB.Infrastructure.Services
                 _mapper.Map(dto, contact);
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, contact.ReceptionSchedule ?? "");
-                    contact.ReceptionSchedule = await dto.File.FileUpload(_env.WebRootPath, "contacts");
+                    _fileService.Delete(contact.ReceptionSchedule);
+                    contact.ReceptionSchedule = await _fileService.UploadAsync(dto.File, "contacts");
                     float fileSize = (float)Math.Round(dto.File.Length / 1024f, 2);
                     contact.FileSize = $"{fileSize} KB";
                 }

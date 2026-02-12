@@ -4,8 +4,6 @@ using CB.Application.DTOs.InternshipDirection;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -14,20 +12,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<InternshipDirection> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public InternshipDirectionService(
             IGenericRepository<InternshipDirection> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<InternshipDirectionGetDTO>> GetAllAsync()
@@ -55,7 +53,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<InternshipDirection>(dto);
-            entity.Icon = await dto.File.FileUpload(_env.WebRootPath, "internshipdirections");
+            entity.Icon = await _fileService.UploadAsync(dto.File, "internshipdirections");
             entity.Translations = dto.Titles.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -88,8 +86,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Icon ?? "");
-                entity.Icon = await dto.File.FileUpload(_env.WebRootPath, "internshipdirections");
+                _fileService.Delete(entity.Icon);
+                entity.Icon = await _fileService.UploadAsync(dto.File, "internshipdirections");
             }
 
             var languages = await _languageRepository.GetAllAsync();
@@ -120,7 +118,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Icon ?? "");
+            _fileService.Delete(entity.Icon);
             return await _repository.DeleteAsync(entity);
         }
 

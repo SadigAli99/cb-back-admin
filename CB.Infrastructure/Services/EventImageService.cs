@@ -5,8 +5,6 @@ using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
 using CB.Core.Enums;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -14,18 +12,18 @@ namespace CB.Infrastructure.Services
     public class EventImageService : IEventImageService
     {
         private readonly IGenericRepository<EventMedia> _repository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public EventImageService(
             IGenericRepository<EventMedia> repository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
+            _fileService = fileService;
             _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<EventImageGetDTO>> GetAllAsync(int? id)
@@ -61,7 +59,7 @@ namespace CB.Infrastructure.Services
                 {
                     EventId = dto.EventId,
                     MediaType = MediaType.IMAGE,
-                    Url = await file.FileUpload(_env.WebRootPath, "events"),
+                    Url = await _fileService.UploadAsync(file, "events"),
                 };
                 await _repository.AddAsync(entity);
             }
@@ -72,7 +70,6 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, "events");
             return await _repository.DeleteAsync(entity);
         }
 

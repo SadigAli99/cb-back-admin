@@ -3,8 +3,6 @@ using CB.Application.DTOs.AnniversaryStamp;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -13,20 +11,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<AnniversaryStamp> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public AnniversaryStampService(
-            IMapper mapper,
             IGenericRepository<AnniversaryStamp> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _env = env;
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
+            _repository = repository;
+            _fileService = fileService;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(AnniversaryStampPostDTO dto)
@@ -45,7 +43,7 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    entity.Image = await dto.File.FileUpload(_env.WebRootPath, "anniversary-stamps");
+                    entity.Image = await _fileService.UploadAsync(dto.File, "anniversary-stamps");
                 }
 
                 entity.Translations = dto.Titles.Select(v =>
@@ -69,8 +67,8 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    entity.Image = await dto.File.FileUpload(_env.WebRootPath, "anniversary-stamps");
-                    FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+                    entity.Image = await _fileService.UploadAsync(dto.File, "anniversary-stamps");
+                    _fileService.Delete(entity.Image);
                 }
 
                 foreach (var v in dto.Titles)

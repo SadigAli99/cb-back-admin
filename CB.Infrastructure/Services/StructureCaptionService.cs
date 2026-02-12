@@ -3,15 +3,13 @@ using CB.Application.DTOs.StructureCaption;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
 {
     public class StructureCaptionService : IStructureCaptionService
     {
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IGenericRepository<StructureCaption> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
@@ -20,10 +18,10 @@ namespace CB.Infrastructure.Services
             IMapper mapper,
             IGenericRepository<StructureCaption> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IFileService fileService
         )
         {
-            _env = env;
+            _fileService = fileService;
             _mapper = mapper;
             _repository = repository;
             _languageRepository = languageRepository;
@@ -45,8 +43,8 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                    entity.Image = await dto.File.FileUpload(_env.WebRootPath, "structures");
+                    _fileService.Delete( entity.Image ?? "");
+                    entity.Image = await _fileService.UploadAsync(dto.File, "structures");
                 }
 
                 entity.Translations = dto.Descriptions.Select(v =>
@@ -70,8 +68,8 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                    entity.Image = await dto.File.FileUpload(_env.WebRootPath, "structures");
+                    _fileService.Delete( entity.Image ?? "");
+                    entity.Image = await _fileService.UploadAsync(dto.File, "structures");
                 }
 
                 foreach (var v in dto.Descriptions)

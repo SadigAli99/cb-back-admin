@@ -4,9 +4,7 @@ using CB.Application.DTOs.Manager;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
 using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -16,19 +14,19 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<Manager> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
 
         public ManagerService(
             IGenericRepository<Manager> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<ManagerGetDTO>> GetAllAsync()
@@ -57,7 +55,7 @@ namespace CB.Infrastructure.Services
             var languages = await _languageRepository.GetAllAsync();
             dto.Slugs = SlugHelper.GenerateSlugs(dto.Fullnames);
             var entity = _mapper.Map<Manager>(dto);
-            entity.Image = await dto.File.FileUpload(_env.WebRootPath, "managers");
+            entity.Image = await _fileService.UploadAsync(dto.File, "managers");
             entity.Translations = dto.Fullnames.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -94,8 +92,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                entity.Image = await dto.File.FileUpload(_env.WebRootPath, "managers");
+                _fileService.Delete( entity.Image ?? "");
+                entity.Image = await _fileService.UploadAsync(dto.File, "managers");
             }
 
             var languages = await _languageRepository.GetAllAsync();
@@ -128,7 +126,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            _fileService.Delete( entity.Image ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

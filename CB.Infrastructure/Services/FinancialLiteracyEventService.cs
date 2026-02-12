@@ -4,7 +4,6 @@ using CB.Application.DTOs.FinancialLiteracyEvent;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services

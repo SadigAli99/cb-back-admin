@@ -4,30 +4,28 @@ using CB.Application.DTOs.LegalAct;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
 {
     public class LegalActService : ILegalActService
     {
-        private readonly IGenericRepository<LegalAct> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<LegalAct> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public LegalActService(
-            IGenericRepository<LegalAct> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IGenericRepository<LegalAct> repository,
+            IFileService fileService,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<LegalActGetDTO>> GetAllAsync()
@@ -55,7 +53,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<LegalAct>(dto);
-            entity.File = await dto.File.FileUpload(_env.WebRootPath, "interviews");
+            entity.File = await _fileService.UploadAsync(dto.File, "legal-acts");
             entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             entity.Translations = dto.Titles.Select(t =>
             {
@@ -90,8 +88,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
-                entity.File = await dto.File.FileUpload(_env.WebRootPath, "interviews");
+                _fileService.Delete(entity.File ?? "");
+                entity.File = await _fileService.UploadAsync(dto.File, "legal-acts");
                 entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             }
 
@@ -123,7 +121,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
+            _fileService.Delete(entity.File ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

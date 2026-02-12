@@ -5,30 +5,28 @@ using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
 using CB.Core.Enums;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
 {
     public class CoinMoneySignService : ICoinMoneySignService
     {
-        private readonly IGenericRepository<MoneySign> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<MoneySign> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public CoinMoneySignService(
-            IGenericRepository<MoneySign> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IGenericRepository<MoneySign> repository,
+            IFileService fileService,
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<CoinMoneySignGetDTO>> GetAllAsync()
@@ -59,7 +57,7 @@ namespace CB.Infrastructure.Services
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<MoneySign>(dto);
             entity.Type = MoneySignType.COIN;
-            entity.Image = await dto.File.FileUpload(_env.WebRootPath, "money-signs");
+            entity.Image = await _fileService.UploadAsync(dto.File, "money-signs");
             entity.Translations = dto.Titles.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -91,8 +89,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                entity.Image = await dto.File.FileUpload(_env.WebRootPath, "money-signs");
+                _fileService.Delete(entity.Image);
+                entity.Image = await _fileService.UploadAsync(dto.File, "money-signs");
             }
 
             entity.Type = MoneySignType.COIN;
@@ -122,7 +120,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            _fileService.Delete(entity.Image);
             return await _repository.DeleteAsync(entity);
         }
 

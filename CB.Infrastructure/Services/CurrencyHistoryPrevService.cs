@@ -4,9 +4,6 @@ using CB.Application.DTOs.CurrencyHistoryPrev;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Core.Enums;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -17,22 +14,22 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<CurrencyHistoryPrev> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IConfiguration _config;
 
         public CurrencyHistoryPrevService(
             IGenericRepository<CurrencyHistoryPrev> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IConfiguration config,
             IMapper mapper
         )
         {
             _languageRepository = languageRepository;
+            _fileService = fileService;
             _repository = repository;
             _mapper = mapper;
             _config = config;
-            _env = env;
         }
 
         public async Task<List<CurrencyHistoryPrevGetDTO>> GetAllAsync()
@@ -74,7 +71,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<CurrencyHistoryPrev>(dto);
-            entity.Image = await dto.File.FileUpload(_env.WebRootPath, "currency-histories");
+            entity.Image = await _fileService.UploadAsync(dto.File, "currency-histories");
             entity.Translations = dto.Titles.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -107,8 +104,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                entity.Image = await dto.File.FileUpload(_env.WebRootPath, "currency-histories");
+                _fileService.Delete(entity.Image);
+                entity.Image = await _fileService.UploadAsync(dto.File, "currency-histories");
             }
 
             var languages = await _languageRepository.GetAllAsync();
@@ -139,7 +136,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            _fileService.Delete(entity.Image);
             return await _repository.DeleteAsync(entity);
         }
 

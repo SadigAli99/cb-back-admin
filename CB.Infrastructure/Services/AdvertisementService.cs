@@ -4,10 +4,7 @@ using CB.Application.DTOs.Advertisement;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
 using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services

@@ -3,8 +3,6 @@ using CB.Application.DTOs.CBAR105Event;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,22 +10,22 @@ namespace CB.Infrastructure.Services
 {
     public class CBAR105EventService : ICBAR105EventService
     {
-        private readonly IGenericRepository<CBAR105Event> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<CBAR105Event> _repository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
 
         public CBAR105EventService(
-            IMapper mapper,
-            IGenericRepository<CBAR105Event> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IGenericRepository<CBAR105Event> repository,
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _env = env;
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(CBAR105EventPostDTO dto)
@@ -89,7 +87,7 @@ namespace CB.Infrastructure.Services
                 {
                     entity.Images.Add(new CBAR105EventImage
                     {
-                        Image = await file.FileUpload(_env.WebRootPath, "cbar105-events")
+                        Image = await _fileService.UploadAsync(file, "cbar105-events")
                     });
                 }
 
@@ -111,7 +109,7 @@ namespace CB.Infrastructure.Services
 
             var image = entity.Images.FirstOrDefault(i => i.Id == imageId);
             if (image is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, image.Image);
+            _fileService.Delete(image.Image);
             entity.Images.Remove(image);
 
             return await _repository.UpdateAsync(entity);

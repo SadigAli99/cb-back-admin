@@ -4,9 +4,6 @@ using CB.Application.DTOs.FinancialLiteracyPortal;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,20 +13,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<FinancialLiteracyPortal> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public FinancialLiteracyPortalService(
             IGenericRepository<FinancialLiteracyPortal> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<FinancialLiteracyPortalGetDTO>> GetAllAsync()
@@ -93,7 +90,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new FinancialLiteracyPortalImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "financial-literacy-portals"),
+                    Image = await _fileService.UploadAsync(file, "financial-literacy-portals"),
                 });
             }
 
@@ -133,7 +130,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new FinancialLiteracyPortalImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "financial-literacy-portals"),
+                    Image = await _fileService.UploadAsync(file, "financial-literacy-portals"),
                 });
             }
 
@@ -161,7 +158,7 @@ namespace CB.Infrastructure.Services
 
             var image = entity.Images.FirstOrDefault(i => i.Id == imageId);
             if (image is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, image.Image ?? "");
+            _fileService.Delete(image.Image);
             entity.Images.Remove(image);
 
             return await _repository.UpdateAsync(entity);

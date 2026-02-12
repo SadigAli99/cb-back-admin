@@ -16,13 +16,13 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<LegalBasis> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IConfiguration _config;
 
         public LegalBasisService(
             IGenericRepository<Language> languageRepository,
             IGenericRepository<LegalBasis> repository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IConfiguration config,
             IMapper mapper
         )
@@ -31,7 +31,7 @@ namespace CB.Infrastructure.Services
             _repository = repository;
             _config = config;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<LegalBasisGetDTO>> GetAllAsync()
@@ -67,7 +67,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<LegalBasis>(dto);
-            entity.File = await dto.File.FileUpload(_env.WebRootPath, "legal-bases");
+            entity.File = await _fileService.UploadAsync(dto.File, "legal-bases");
             entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             entity.Translations = dto.Titles.Select(t =>
             {
@@ -100,8 +100,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
-                entity.File = await dto.File.FileUpload(_env.WebRootPath, "legal-bases");
+                _fileService.Delete( entity.File ?? "");
+                entity.File = await _fileService.UploadAsync(dto.File, "legal-bases");
                 entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             }
 
@@ -130,7 +130,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
+            _fileService.Delete( entity.File ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

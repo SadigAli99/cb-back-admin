@@ -4,9 +4,6 @@ using CB.Application.DTOs.MoneySignProtectionElement;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,19 +14,19 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<MoneySignProtectionElement> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
 
         public MoneySignProtectionElementService(
             IGenericRepository<MoneySignProtectionElement> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<MoneySignProtectionElementGetDTO>> GetAllAsync(int? id)
@@ -100,7 +97,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new MoneySignProtectionElementImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "money-sign-protection-elements"),
+                    Image = await _fileService.UploadAsync(file, "money-sign-protection-elements"),
                 });
             }
 
@@ -142,7 +139,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new MoneySignProtectionElementImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "money-sign-protection-elements"),
+                    Image = await _fileService.UploadAsync(file, "money-sign-protection-elements"),
                 });
             }
 
@@ -170,7 +167,7 @@ namespace CB.Infrastructure.Services
 
             var image = entity.Images.FirstOrDefault(i => i.Id == imageId);
             if (image is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, image.Image ?? "");
+            _fileService.Delete(image.Image ?? "");
             entity.Images.Remove(image);
 
             return await _repository.UpdateAsync(entity);

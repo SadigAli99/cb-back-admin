@@ -101,6 +101,7 @@ namespace CB.Infrastructure
             services.AddScoped<ILanguageService, LanguageService>();
             services.AddScoped<IAuthRepository, AuthRepository>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IFileService, LocalFileService>();
             services.AddScoped<ILogoService, LogoService>();
             services.AddScoped<ITranslateService, TranslateService>();
             services.AddScoped<ISocialService, SocialService>();

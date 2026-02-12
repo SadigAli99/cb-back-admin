@@ -4,30 +4,28 @@ using CB.Application.DTOs.DigitalPayment;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
 {
     public class DigitalPaymentService : IDigitalPaymentService
     {
-        private readonly IGenericRepository<DigitalPayment> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<DigitalPayment> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public DigitalPaymentService(
             IGenericRepository<DigitalPayment> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<DigitalPaymentGetDTO>> GetAllAsync()
@@ -55,7 +53,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<DigitalPayment>(dto);
-            entity.File = await dto.File.FileUpload(_env.WebRootPath, "digital-payments");
+            entity.File = await _fileService.UploadAsync(dto.File, "digital-payments");
             entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             entity.Translations = dto.Titles.Select(t =>
             {
@@ -90,8 +88,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
-                entity.File = await dto.File.FileUpload(_env.WebRootPath, "digital-payments");
+                _fileService.Delete(entity.File);
+                entity.File = await _fileService.UploadAsync(dto.File, "digital-payments");
                 entity.FileType = Path.GetExtension(dto.File.FileName)?.TrimStart('.');
             }
 
@@ -123,7 +121,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.File ?? "");
+            _fileService.Delete(entity.File);
             return await _repository.DeleteAsync(entity);
         }
 

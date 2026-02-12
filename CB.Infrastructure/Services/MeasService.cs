@@ -4,9 +4,6 @@ using CB.Application.DTOs.Meas;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -15,20 +12,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<Meas> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public MeasService(
             IGenericRepository<Meas> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<MeasGetDTO>> GetAllAsync()
@@ -74,7 +71,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<Meas>(dto);
-            entity.PdfFile = await dto.File.FileUpload(_env.WebRootPath, "meas");
+            entity.PdfFile = await _fileService.UploadAsync(dto.File, "meas");
             entity.Translations = dto.Titles.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -105,8 +102,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.PdfFile ?? "");
-                entity.PdfFile = await dto.File.FileUpload(_env.WebRootPath, "meas");
+                _fileService.Delete( entity.PdfFile ?? "");
+                entity.PdfFile = await _fileService.UploadAsync(dto.File, "meas");
             }
 
             var languages = await _languageRepository.GetAllAsync();
@@ -134,7 +131,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.PdfFile ?? "");
+            _fileService.Delete( entity.PdfFile ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

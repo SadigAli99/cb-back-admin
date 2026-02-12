@@ -4,6 +4,7 @@ using CB.Web.Swagger;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using CB.Web.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Host.UseSerilog((context, services, configuration) =>
 });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
+builder.Services.AddR2Storage(builder.Configuration);
 builder.Services.AddSwaggerGen(c =>
 {
     c.SchemaFilter<GenericSchemaFilter>();

@@ -3,8 +3,6 @@ using CB.Application.DTOs.FinancialLiteracyEventCaption;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -13,20 +11,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<FinancialLiteracyEventCaption> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public FinancialLiteracyEventCaptionService(
-            IMapper mapper,
             IGenericRepository<FinancialLiteracyEventCaption> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
-            _env = env;
+            _fileService = fileService;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(FinancialLiteracyEventCaptionPostDTO dto)
@@ -42,7 +40,7 @@ namespace CB.Infrastructure.Services
             if (financialDevelopment is null)
             {
                 financialDevelopment = _mapper.Map<FinancialLiteracyEventCaption>(dto);
-                if (dto.File != null) financialDevelopment.Image = await dto.File.FileUpload(_env.WebRootPath, "financial-literacy-event-captions");
+                if (dto.File != null) financialDevelopment.Image = await _fileService.UploadAsync(dto.File, "financial-literacy-event-captions");
 
 
                 financialDevelopment.Translations = dto.Titles.Select(v =>
@@ -66,8 +64,8 @@ namespace CB.Infrastructure.Services
 
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, financialDevelopment.Image ?? "");
-                    financialDevelopment.Image = await dto.File.FileUpload(_env.WebRootPath, "financial-literacy-event-captions");
+                    _fileService.Delete(financialDevelopment.Image ?? "");
+                    financialDevelopment.Image = await _fileService.UploadAsync(dto.File, "financial-literacy-event-captions");
                 }
 
                 foreach (var v in dto.Titles)

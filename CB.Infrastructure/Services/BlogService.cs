@@ -4,9 +4,7 @@ using CB.Application.DTOs.Blog;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
 using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,22 +12,22 @@ namespace CB.Infrastructure.Services
 {
     public class BlogService : IBlogService
     {
-        private readonly IGenericRepository<Blog> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
+        private readonly IGenericRepository<Blog> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public BlogService(
-            IGenericRepository<Blog> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IGenericRepository<Blog> repository,
+            IFileService fileService,
             IMapper mapper
         )
         {
-            _repository = repository;
             _languageRepository = languageRepository;
+            _fileService = fileService;
+            _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<BlogGetDTO>> GetAllAsync()
@@ -68,7 +66,7 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<Blog>(dto);
-            entity.Image = await dto.ImageFile.FileUpload(_env.WebRootPath, "blogs");
+            entity.Image = await _fileService.UploadAsync(dto.ImageFile, "blogs");
             dto.Slugs = SlugHelper.GenerateSlugs(dto.Titles);
             entity.Translations = dto.Titles.Select(t =>
             {
@@ -104,7 +102,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new BlogImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "blogs"),
+                    Image = await _fileService.UploadAsync(file, "blogs"),
                 });
             }
 
@@ -125,8 +123,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.ImageFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                entity.Image = await dto.ImageFile.FileUpload(_env.WebRootPath, "blogs");
+                _fileService.Delete(entity.Image);
+                entity.Image = await _fileService.UploadAsync(dto.ImageFile, "blogs");
             }
 
             dto.Slugs = SlugHelper.GenerateSlugs(dto.Titles);
@@ -167,7 +165,7 @@ namespace CB.Infrastructure.Services
             {
                 entity.Images?.Add(new BlogImage
                 {
-                    Image = await file.FileUpload(_env.WebRootPath, "blogs"),
+                    Image = await _fileService.UploadAsync(file, "blogs"),
                 });
             }
 
@@ -181,7 +179,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            _fileService.Delete(entity.Image);
             return await _repository.DeleteAsync(entity);
         }
 
@@ -196,7 +194,7 @@ namespace CB.Infrastructure.Services
 
             var image = entity.Images.FirstOrDefault(i => i.Id == imageId);
             if (image is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, image.Image);
+            _fileService.Delete(image.Image);
             entity.Images.Remove(image);
 
             return await _repository.UpdateAsync(entity);

@@ -1,51 +1,50 @@
-
-
 using ImageMagick;
 using Microsoft.AspNetCore.Http;
+using CB.Shared.Storage;   // <-- bunu əlavə et
 
 namespace CB.Shared.Extensions
 {
     public static class FileManager
     {
-        public static async Task<string> FileUpload(this IFormFile? file, string rootFolder, string folder)
+        public static async Task<string> FileUpload(
+            this IFormFile? file,
+            string rootFolder,
+            string folder,
+            IFileStorage storage)   // <-- yeni parametr
         {
             string[] extensions = [".jpg", ".jpeg", ".png", ".bmp", ".gif"];
 
             if (file == null || file.Length == 0)
                 throw new ArgumentException("Fayl düzgün deyil");
 
-            string uploadPath = Path.Combine(rootFolder, "uploads", folder);
-
-            if (!Directory.Exists(uploadPath))
-                Directory.CreateDirectory(uploadPath);
-
             string extension = Path.GetExtension(file.FileName).ToLower();
             string fileName = $"{Guid.NewGuid()}";
-            string finalPath;
+
+            // R2 key: uploads/<folder>/<file>
+            string key;
 
             if (extensions.Contains(extension))
             {
-                // WebP formatına çevir
-                finalPath = Path.Combine(uploadPath, fileName + ".webp");
-                using (var stream = file.OpenReadStream())
-                using (var image = new MagickImage(stream))
-                {
-                    image.Format = MagickFormat.WebP;
-                    image.Write(finalPath);
-                }
+                key = $"uploads/{folder}/{fileName}.webp";
 
-                return $"/uploads/{folder}/{fileName}.webp";
+                using var input = file.OpenReadStream();
+                using var image = new MagickImage(input);
+                image.Format = MagickFormat.WebP;
+
+                await using var outStream = new MemoryStream();
+                image.Write(outStream);
+                outStream.Position = 0;
+
+                await storage.UploadAsync(key, outStream, "image/webp");
+                return storage.GetPublicUrl(key);
             }
             else
             {
-                // Normal fayl kimi saxla
-                finalPath = Path.Combine(uploadPath, fileName + extension);
-                using (var stream = new FileStream(finalPath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
+                key = $"uploads/{folder}/{fileName}{extension}";
 
-                return $"/uploads/{folder}/{fileName}{extension}";
+                await using var stream = file.OpenReadStream();
+                await storage.UploadAsync(key, stream, file.ContentType ?? "application/octet-stream");
+                return storage.GetPublicUrl(key);
             }
         }
 
@@ -57,7 +56,5 @@ namespace CB.Shared.Extensions
                 File.Delete(fullPath);
             }
         }
-
     }
-
 }

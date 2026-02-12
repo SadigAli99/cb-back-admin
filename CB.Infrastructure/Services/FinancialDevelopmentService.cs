@@ -3,8 +3,6 @@ using CB.Application.DTOs.FinancialDevelopment;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -13,20 +11,20 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<FinancialDevelopment> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public FinancialDevelopmentService(
-            IMapper mapper,
             IGenericRepository<FinancialDevelopment> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
-            _env = env;
+            _fileService = fileService;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(FinancialDevelopmentPostDTO dto)
@@ -42,8 +40,8 @@ namespace CB.Infrastructure.Services
             if (financialDevelopment is null)
             {
                 financialDevelopment = _mapper.Map<FinancialDevelopment>(dto);
-                if (dto.File != null) financialDevelopment.PdfFile = await dto.File.FileUpload(_env.WebRootPath, "financial-developments");
-                if (dto.ImageFile != null) financialDevelopment.Image = await dto.ImageFile.FileUpload(_env.WebRootPath, "financial-developments");
+                if (dto.File != null) financialDevelopment.PdfFile = await _fileService.UploadAsync(dto.File, "financial-developments");
+                if (dto.ImageFile != null) financialDevelopment.Image = await _fileService.UploadAsync(dto.ImageFile, "financial-developments");
 
 
                 financialDevelopment.Translations = dto.Titles.Select(v =>
@@ -73,14 +71,14 @@ namespace CB.Infrastructure.Services
                 _mapper.Map(dto, financialDevelopment);
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, financialDevelopment.PdfFile ?? "");
-                    financialDevelopment.PdfFile = await dto.File.FileUpload(_env.WebRootPath, "financial-developments");
+                    _fileService.Delete(financialDevelopment.PdfFile ?? "");
+                    financialDevelopment.PdfFile = await _fileService.UploadAsync(dto.File, "financial-developments");
                 }
 
                 if (dto.ImageFile != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, financialDevelopment.Image ?? "");
-                    financialDevelopment.Image = await dto.ImageFile.FileUpload(_env.WebRootPath, "financial-developments");
+                    _fileService.Delete(financialDevelopment.Image ?? "");
+                    financialDevelopment.Image = await _fileService.UploadAsync(dto.ImageFile, "financial-developments");
                 }
 
                 foreach (var v in dto.Titles)

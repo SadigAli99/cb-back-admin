@@ -4,9 +4,6 @@ using CB.Application.DTOs.MoneySignCharacteristicImage;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Core.Enums;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -16,14 +13,14 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<MoneySignCharacteristicImage> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
         public MoneySignCharacteristicImageService(
             IGenericRepository<MoneySignCharacteristicImage> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IConfiguration config,
             IMapper mapper
         )
@@ -32,7 +29,7 @@ namespace CB.Infrastructure.Services
             _repository = repository;
             _mapper = mapper;
             _config = config;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<MoneySignCharacteristicImageGetDTO>> GetAllAsync()
@@ -40,8 +37,8 @@ namespace CB.Infrastructure.Services
             var entities = await _repository.GetQuery()
                         .Include(b => b.Translations)
                         .ThenInclude(bt => bt.Language)
-                        .Include(x=>x.MoneySignHistory)
-                        .ThenInclude(x=>x.Translations)
+                        .Include(x => x.MoneySignHistory)
+                        .ThenInclude(x => x.Translations)
                         .ToListAsync();
 
             List<MoneySignCharacteristicImageGetDTO> data = _mapper.Map<List<MoneySignCharacteristicImageGetDTO>>(entities);
@@ -76,8 +73,8 @@ namespace CB.Infrastructure.Services
         {
             var languages = await _languageRepository.GetAllAsync();
             var entity = _mapper.Map<MoneySignCharacteristicImage>(dto);
-            entity.FrontImage = await dto.FrontFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
-            entity.BackImage = await dto.BackFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
+            entity.FrontImage = await _fileService.UploadAsync(dto.FrontFile, "money-sign-characteristics");
+            entity.BackImage = await _fileService.UploadAsync(dto.BackFile, "money-sign-characteristics");
             entity.Translations = dto.Colors.Select(t =>
             {
                 var lang = languages.FirstOrDefault(x => x.Code == t.Key);
@@ -110,14 +107,14 @@ namespace CB.Infrastructure.Services
 
             if (dto.FrontFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.FrontImage ?? "");
-                entity.FrontImage = await dto.FrontFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
+                _fileService.Delete(entity.FrontImage ?? "");
+                entity.FrontImage = await _fileService.UploadAsync(dto.FrontFile, "money-sign-characteristics");
             }
 
             if (dto.BackFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.BackImage ?? "");
-                entity.BackImage = await dto.BackFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
+                _fileService.Delete(entity.BackImage ?? "");
+                entity.BackImage = await _fileService.UploadAsync(dto.BackFile, "money-sign-characteristics");
             }
 
             var languages = await _languageRepository.GetAllAsync();
@@ -148,8 +145,8 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.FrontImage ?? "");
-            FileManager.FileDelete(_env.WebRootPath, entity.BackImage ?? "");
+            _fileService.Delete(entity.FrontImage ?? "");
+            _fileService.Delete(entity.BackImage ?? "");
             return await _repository.DeleteAsync(entity);
         }
 

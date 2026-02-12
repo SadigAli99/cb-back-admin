@@ -4,8 +4,6 @@ using CB.Application.DTOs.ReviewApplicationVideo;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -15,19 +13,19 @@ namespace CB.Infrastructure.Services
         private readonly IGenericRepository<ReviewApplicationVideo> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
 
         public ReviewApplicationVideoService(
             IGenericRepository<ReviewApplicationVideo> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
             _repository = repository;
             _languageRepository = languageRepository;
             _mapper = mapper;
-            _env = env;
+            _fileService = fileService;
         }
 
         public async Task<List<ReviewApplicationVideoGetDTO>> GetAllAsync()

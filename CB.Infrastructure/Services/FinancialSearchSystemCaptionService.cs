@@ -3,8 +3,6 @@ using CB.Application.DTOs.FinancialSearchSystemCaption;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -13,39 +11,39 @@ namespace CB.Infrastructure.Services
     {
         private readonly IGenericRepository<FinancialSearchSystemCaption> _repository;
         private readonly IGenericRepository<Language> _languageRepository;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
 
         public FinancialSearchSystemCaptionService(
-            IMapper mapper,
             IGenericRepository<FinancialSearchSystemCaption> repository,
             IGenericRepository<Language> languageRepository,
-            IWebHostEnvironment env
+            IFileService fileService,
+            IMapper mapper
         )
         {
-            _mapper = mapper;
-            _repository = repository;
             _languageRepository = languageRepository;
-            _env = env;
+            _fileService = fileService;
+            _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<bool> CreateOrUpdate(FinancialSearchSystemCaptionPostDTO dto)
         {
             var languages = await _languageRepository.GetAllAsync();
-            FinancialSearchSystemCaption? financialDevelopment = await _repository.GetQuery()
+            FinancialSearchSystemCaption? finalcialSearchSystemCaption = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync();
 
             bool result;
 
-            if (financialDevelopment is null)
+            if (finalcialSearchSystemCaption is null)
             {
-                financialDevelopment = _mapper.Map<FinancialSearchSystemCaption>(dto);
-                if (dto.File != null) financialDevelopment.Image = await dto.File.FileUpload(_env.WebRootPath, "financial-search-system-captions");
+                finalcialSearchSystemCaption = _mapper.Map<FinancialSearchSystemCaption>(dto);
+                if (dto.File != null) finalcialSearchSystemCaption.Image = await _fileService.UploadAsync(dto.File, "financial-search-system-captions");
 
 
-                financialDevelopment.Translations = dto.Titles.Select(v =>
+                finalcialSearchSystemCaption.Translations = dto.Titles.Select(v =>
                 {
                     var lang = languages.FirstOrDefault(l => l.Code == v.Key);
                     if (lang == null)
@@ -58,16 +56,16 @@ namespace CB.Infrastructure.Services
                     };
                 }).ToList();
 
-                result = await _repository.AddAsync(financialDevelopment);
+                result = await _repository.AddAsync(finalcialSearchSystemCaption);
             }
             else
             {
-                _mapper.Map(dto, financialDevelopment);
+                _mapper.Map(dto, finalcialSearchSystemCaption);
 
                 if (dto.File != null)
                 {
-                    FileManager.FileDelete(_env.WebRootPath, financialDevelopment.Image ?? "");
-                    financialDevelopment.Image = await dto.File.FileUpload(_env.WebRootPath, "financial-search-system-captions");
+                    _fileService.Delete(finalcialSearchSystemCaption.Image ?? "");
+                    finalcialSearchSystemCaption.Image = await _fileService.UploadAsync(dto.File, "financial-search-system-captions");
                 }
 
                 foreach (var v in dto.Titles)
@@ -77,7 +75,7 @@ namespace CB.Infrastructure.Services
                         throw new Exception($"'{v.Key}' kodu ilə dil tapılmadı.");
 
 
-                    var existingTranslation = financialDevelopment.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
+                    var existingTranslation = finalcialSearchSystemCaption.Translations.FirstOrDefault(t => t.LanguageId == lang.Id);
 
                     if (existingTranslation != null)
                     {
@@ -85,7 +83,7 @@ namespace CB.Infrastructure.Services
                     }
                     else
                     {
-                        financialDevelopment.Translations.Add(new FinancialSearchSystemCaptionTranslation
+                        finalcialSearchSystemCaption.Translations.Add(new FinancialSearchSystemCaptionTranslation
                         {
                             LanguageId = lang.Id,
                             Title = v.Value,
@@ -93,7 +91,7 @@ namespace CB.Infrastructure.Services
                     }
                 }
 
-                result = await _repository.UpdateAsync(financialDevelopment);
+                result = await _repository.UpdateAsync(finalcialSearchSystemCaption);
             }
 
 
@@ -102,12 +100,12 @@ namespace CB.Infrastructure.Services
 
         public async Task<FinancialSearchSystemCaptionGetDTO?> GetFirst()
         {
-            FinancialSearchSystemCaption? financialDevelopment = await _repository.GetQuery()
+            FinancialSearchSystemCaption? finalcialSearchSystemCaption = await _repository.GetQuery()
                 .Include(h => h.Translations)
                 .ThenInclude(x => x.Language)
                 .FirstOrDefaultAsync(h => h.Id == 1);
 
-            return financialDevelopment == null ? null : _mapper.Map<FinancialSearchSystemCaptionGetDTO>(financialDevelopment);
+            return finalcialSearchSystemCaption == null ? null : _mapper.Map<FinancialSearchSystemCaptionGetDTO>(finalcialSearchSystemCaption);
         }
     }
 }

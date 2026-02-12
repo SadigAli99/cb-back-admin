@@ -4,10 +4,6 @@ using CB.Application.DTOs.CBAR100Gallery;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using CB.Shared.Helpers;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 namespace CB.Infrastructure.Services
@@ -15,18 +11,18 @@ namespace CB.Infrastructure.Services
     public class CBAR100GalleryService : ICBAR100GalleryService
     {
         private readonly IGenericRepository<CBAR100Gallery> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
 
         public CBAR100GalleryService(
             IGenericRepository<CBAR100Gallery> repository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IMapper mapper
         )
         {
+            _fileService = fileService;
             _repository = repository;
             _mapper = mapper;
-            _env = env;
         }
 
         public async Task<List<CBAR100GalleryGetDTO>> GetAllAsync()
@@ -49,7 +45,7 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateAsync(CBAR100GalleryCreateDTO dto)
         {
             var entity = _mapper.Map<CBAR100Gallery>(dto);
-            entity.Image = await dto.File.FileUpload(_env.WebRootPath, "cbar100-galleries");
+            entity.Image = await _fileService.UploadAsync(dto.File, "cbar100-galleries");
 
             return await _repository.AddAsync(entity);
         }
@@ -64,8 +60,8 @@ namespace CB.Infrastructure.Services
 
             if (dto.File != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
-                entity.Image = await dto.File.FileUpload(_env.WebRootPath, "cbar100-galleries");
+                _fileService.Delete(entity.Image);
+                entity.Image = await _fileService.UploadAsync(dto.File, "cbar100-galleries");
             }
 
             return await _repository.UpdateAsync(entity);
@@ -76,7 +72,7 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.Image ?? "");
+            _fileService.Delete(entity.Image);
             return await _repository.DeleteAsync(entity);
         }
 

@@ -5,8 +5,6 @@ using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
 using CB.Core.Enums;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -15,21 +13,21 @@ namespace CB.Infrastructure.Services
     public class CoinMoneySignCharacteristicImageService : ICoinMoneySignCharacteristicImageService
     {
         private readonly IGenericRepository<MoneySignCharacteristicImage> _repository;
+        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
 
         public CoinMoneySignCharacteristicImageService(
             IGenericRepository<MoneySignCharacteristicImage> repository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IConfiguration config,
             IMapper mapper
         )
         {
+            _fileService = fileService;
             _repository = repository;
             _mapper = mapper;
             _config = config;
-            _env = env;
         }
 
         public async Task<List<CoinMoneySignCharacteristicImageGetDTO>> GetAllAsync()
@@ -78,8 +76,8 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateAsync(CoinMoneySignCharacteristicImageCreateDTO dto)
         {
             var entity = _mapper.Map<MoneySignCharacteristicImage>(dto);
-            entity.FrontImage = await dto.FrontFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
-            entity.BackImage = await dto.BackFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
+            entity.FrontImage = await _fileService.UploadAsync(dto.FrontFile, "money-sign-characteristics");
+            entity.BackImage = await _fileService.UploadAsync(dto.BackFile, "money-sign-characteristics");
             return await _repository.AddAsync(entity);
         }
 
@@ -96,14 +94,14 @@ namespace CB.Infrastructure.Services
 
             if (dto.FrontFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.FrontImage ?? "");
-                entity.FrontImage = await dto.FrontFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
+                _fileService.Delete(entity.FrontImage);
+                entity.FrontImage = await _fileService.UploadAsync(dto.FrontFile, "money-sign-characteristics");
             }
 
             if (dto.BackFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.BackImage ?? "");
-                entity.BackImage = await dto.BackFile.FileUpload(_env.WebRootPath, "money-sign-characteristics");
+                _fileService.Delete(entity.BackImage);
+                entity.BackImage = await _fileService.UploadAsync(dto.BackFile, "money-sign-characteristics");
             }
 
 
@@ -115,8 +113,8 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.FrontImage ?? "");
-            FileManager.FileDelete(_env.WebRootPath, entity.BackImage ?? "");
+            _fileService.Delete(entity.FrontImage);
+            _fileService.Delete(entity.BackImage);
             return await _repository.DeleteAsync(entity);
         }
 

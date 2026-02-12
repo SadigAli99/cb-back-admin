@@ -4,8 +4,6 @@ using CB.Application.DTOs.CurrencyHistoryNextItem;
 using CB.Application.Interfaces.Repositories;
 using CB.Application.Interfaces.Services;
 using CB.Core.Entities;
-using CB.Shared.Extensions;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -14,21 +12,21 @@ namespace CB.Infrastructure.Services
     public class CurrencyHistoryNextItemService : ICurrencyHistoryNextItemService
     {
         private readonly IGenericRepository<CurrencyHistoryNextItem> _repository;
-        private readonly IMapper _mapper;
-        private readonly IWebHostEnvironment _env;
+        private readonly IFileService _fileService;
         private readonly IConfiguration _config;
+        private readonly IMapper _mapper;
 
         public CurrencyHistoryNextItemService(
             IGenericRepository<CurrencyHistoryNextItem> repository,
-            IWebHostEnvironment env,
+            IFileService fileService,
             IConfiguration config,
             IMapper mapper
         )
         {
+            _fileService = fileService;
             _repository = repository;
             _mapper = mapper;
             _config = config;
-            _env = env;
         }
 
         public async Task<List<CurrencyHistoryNextItemGetDTO>> GetAllAsync()
@@ -67,8 +65,8 @@ namespace CB.Infrastructure.Services
         public async Task<bool> CreateAsync(CurrencyHistoryNextItemCreateDTO dto)
         {
             var entity = _mapper.Map<CurrencyHistoryNextItem>(dto);
-            entity.FrontImage = await dto.FrontFile.FileUpload(_env.WebRootPath, "currency-histories");
-            entity.BackImage = await dto.BackFile.FileUpload(_env.WebRootPath, "currency-histories");
+            entity.FrontImage = await _fileService.UploadAsync(dto.FrontFile, "currency-histories");
+            entity.BackImage = await _fileService.UploadAsync(dto.BackFile, "currency-histories");
 
             return await _repository.AddAsync(entity);
         }
@@ -83,14 +81,14 @@ namespace CB.Infrastructure.Services
 
             if (dto.FrontFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.FrontImage ?? "");
-                entity.FrontImage = await dto.FrontFile.FileUpload(_env.WebRootPath, "currency-histories");
+                _fileService.Delete(entity.FrontImage);
+                entity.FrontImage = await _fileService.UploadAsync(dto.FrontFile, "currency-histories");
             }
 
             if (dto.BackFile != null)
             {
-                FileManager.FileDelete(_env.WebRootPath, entity.BackImage ?? "");
-                entity.BackImage = await dto.BackFile.FileUpload(_env.WebRootPath, "currency-histories");
+                _fileService.Delete(entity.BackImage);
+                entity.BackImage = await _fileService.UploadAsync(dto.BackFile, "currency-histories");
             }
 
 
@@ -102,8 +100,8 @@ namespace CB.Infrastructure.Services
         {
             var entity = await _repository.GetByIdAsync(id);
             if (entity is null) return false;
-            FileManager.FileDelete(_env.WebRootPath, entity.FrontImage ?? "");
-            FileManager.FileDelete(_env.WebRootPath, entity.BackImage ?? "");
+            _fileService.Delete(entity.FrontImage);
+            _fileService.Delete(entity.BackImage);
             return await _repository.DeleteAsync(entity);
         }
 
